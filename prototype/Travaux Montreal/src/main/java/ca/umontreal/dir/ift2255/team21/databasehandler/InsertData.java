@@ -5,7 +5,7 @@ public class InsertData {
 
     private static String jdbcUrl = "jdbc:mysql://ift2255.cfm0oqm68j83.us-east-2.rds.amazonaws.com:3306/DataUser?useSSL=false&serverTimezone=UTC";
     private static String admin = "admin";
-    private static String access = "";
+    private static String access = "Team21#UdeM2255";
     public void insertion (String table, String usernameDB, String passwordHash) {
 
         Connection conn = null;
