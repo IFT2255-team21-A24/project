@@ -1,6 +1,6 @@
-package ca.umontreal.diro.ift2255.team21;
+package ca.umontreal.dir.ift2255.team21.accounts;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Account {
     private String first_name, last_name, residential_adress, electronic_adress;
