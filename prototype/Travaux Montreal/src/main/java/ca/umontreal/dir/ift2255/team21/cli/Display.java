@@ -6,7 +6,7 @@ import java.util.*;
 import java.lang.*;
 import java.io.*;
 public class Display {
-    public void introScreen(){
+    public void introScreen() throws Exception{
         Scanner choice = new Scanner(System.in);
         int menuChoice = 0;
 
@@ -32,54 +32,35 @@ public class Display {
                 **      2)  S'inscrire         **
                 **                             **
                 *********************************
+                       Entrez votre choix:
                 """);
-        System.out.print("Entrez le numéro de votre choix: ");
+
         menuChoice = choice.nextInt();
-        choice.nextLine();
-        String os = System.getProperty("os.name").toLowerCase();
-        System.out.println(os);
-        try {
-            if (os.startsWith("windows")) {
-                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            }else if (os.startsWith("mac")) {
-                new ProcessBuilder("open", "/c", "cls").inheritIO().start().waitFor();
-            } else if (os.startsWith("linux")) {
-                new ProcessBuilder("clear").inheritIO().start().waitFor();
-            }
-        }catch (Exception e){
-            System.err.println(e);
-        }
 
         if (menuChoice != 1 && menuChoice != 2) {
             introScreen();
-        }else{
-            choice.close();
-            switch (menuChoice) {
-                case 1:
-                    seConnecter();
-                    break;
-                case 2:
-
-                    break;
-            }
+        }else if(menuChoice == 1){
+            seConnecter();
         }
     }
     public void seConnecter(){
         Scanner input = new Scanner(System.in);
         Account account = null;
-        String username = "", password = "";
+        String username;
+        String password;
         System.out.println("+----------------------------+");
         System.out.println("|         CONNECTION         |");
         System.out.println("|    Travaux de Montreal     |");
         System.out.println("+----------------------------+");
         System.out.print("Username: ");
         username = input.nextLine();
-        System.out.print("Password: ");
+        System.out.print("Username: ");
         password = input.nextLine();
+        input.close();
         account = ConnectionCheck.checkForUser(username, password);
         if (account == null) {
-            System.out.println();
-        }
+            System.out.println("pas de donnée");
+        }else System.out.println(account);
 
 
     }
