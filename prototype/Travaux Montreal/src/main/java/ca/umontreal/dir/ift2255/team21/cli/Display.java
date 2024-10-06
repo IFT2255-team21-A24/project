@@ -1,9 +1,12 @@
 package ca.umontreal.dir.ift2255.team21.cli;
+import ca.umontreal.dir.ift2255.team21.accounts.Account;
+import ca.umontreal.dir.ift2255.team21.databasehandler.ConnectionCheck;
+
 import java.util.*;
 import java.lang.*;
 import java.io.*;
 public class Display {
-    public int introScreen(){
+    public void introScreen(){
         Scanner choice = new Scanner(System.in);
         int menuChoice = 0;
 
@@ -33,14 +36,37 @@ public class Display {
         System.out.print("Entrez le numéro de votre choix: ");
         menuChoice = choice.nextInt();
         choice.nextLine();
-        if (menuChoice != 1 && menuChoice != 2) {
-            menuChoice = introScreen();
+        String os = System.getProperty("os.name").toLowerCase();
+        System.out.println(os);
+        try {
+            if (os.startsWith("windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            }else if (os.startsWith("mac")) {
+                new ProcessBuilder("open", "/c", "cls").inheritIO().start().waitFor();
+            } else if (os.startsWith("linux")) {
+                new ProcessBuilder("clear").inheritIO().start().waitFor();
+            }
+        }catch (Exception e){
+            System.err.println(e);
         }
-        choice.close();
-        return menuChoice;
+
+        if (menuChoice != 1 && menuChoice != 2) {
+            introScreen();
+        }else{
+            choice.close();
+            switch (menuChoice) {
+                case 1:
+                    seConnecter();
+                    break;
+                case 2:
+
+                    break;
+            }
+        }
     }
-    public boolean seConnecter(){
+    public void seConnecter(){
         Scanner input = new Scanner(System.in);
+        Account account = null;
         String username = "", password = "";
         System.out.println("+----------------------------+");
         System.out.println("|         CONNECTION         |");
@@ -50,7 +76,11 @@ public class Display {
         username = input.nextLine();
         System.out.print("Password: ");
         password = input.nextLine();
-        return true;
+        account = ConnectionCheck.checkForUser(username, password);
+        if (account == null) {
+            System.out.println();
+        }
+
 
     }
 

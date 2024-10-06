@@ -7,10 +7,7 @@ import ca.umontreal.dir.ift2255.team21.cli.Display;
 public class Main {
     public static void main(String[] args) throws Exception {
         Display display = new Display();
-        int choiceIntro = display.introScreen();
-        System.out.println(choiceIntro);
-        if (choiceIntro == 1){
-        }
+        display.introScreen();
 
     }
 }
