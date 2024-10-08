@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class DisplayManager {
     public void homePageManager(Manager manager) {
         Scanner input = new Scanner(System.in);
+        int choice;
         System.out.print("""
                 //======================================================\\\\
                 ||        Informations sur vos chantiers en cours       ||
@@ -39,12 +40,22 @@ public class DisplayManager {
                 ||  1) Consultation des requêtes de travail             ||
                 ||  2) Soumettre une nouvelle requête                   ||
                 ||  4) Gestion des équipes et des ressources            ||
+                ||  5) Se déconnecter                                   ||
                 ||                                                      ||
                 \\\\======================================================//
                         Votre choix :   """);
+
+        choice = input.nextInt();
+
+        try {
+            final String system = System.getProperty("os.name").toLowerCase();
+            if (system.contains("windows")) {
+                Runtime.getRuntime().exec("cls");
+            }
+        }catch (Exception e) {}
     }
     public void travauxManager(Manager manager) {
-        System.out.println("""
+        System.out.print("""
                 //================================================================\\\\
                 ||           Travaux en cours/à venir dans votre région           ||
                 ||                      Ville de Montréal                         ||
@@ -85,5 +96,13 @@ public class DisplayManager {
                 ||                                                                ||
                 \\\\================================================================//
                         Votre choix :   """);
+
+        try {
+            final String system = System.getProperty("os.name").toLowerCase();
+            if (system.contains("windows")) {
+                Runtime.getRuntime().exec("cls");
+            }
+        }catch (Exception e) {}
     }
+    
 }

@@ -63,11 +63,17 @@ public class Display {
         username = input.nextLine();
         System.out.print("   Mot de passe: ");
         password = input.nextLine();
-        input.close();
+
         account = ConnectionCheck.checkForUser(username, password);
         if (account == null) {
             System.out.println("pas de donnée");
         }else{
+            try {
+                final String system = System.getProperty("os.name").toLowerCase();
+                if (system.contains("windows")) {
+                    Runtime.getRuntime().exec("cls");
+                }
+            }catch (Exception e) {}
             if (account instanceof Resident) {
                 DisplayResident displayResident = new DisplayResident();
                 displayResident.homePageResident((Resident)account);

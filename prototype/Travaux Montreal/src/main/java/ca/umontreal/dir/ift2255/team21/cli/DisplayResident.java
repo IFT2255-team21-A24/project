@@ -35,15 +35,30 @@ public class DisplayResident {
                 ||  2) Soumission de requête                            ||
                 ||  3) Planification participative                      ||
                 ||  4) Signalisation de problème                        ||
+                ||  5) Se déconnecter                                   ||
                 ||                                                      ||
                 \\\\======================================================//
                         Votre choix :   """);
         choice = input.nextInt();
+        try {
+            final String system = System.getProperty("os.name").toLowerCase();
+            if (system.contains("windows")) {
+                Runtime.getRuntime().exec("cls");
+            }
+        }catch (Exception e) {}
+        switch (choice){
+            case 1:
+                travauxResident(resident);
+                break;
+            case 2:
+            case 3:
+            case 4:
+        }
 
 
     }
     public void travauxResident(Resident resident) {
-        System.out.println("""
+        System.out.print("""
                 //================================================================\\\\
                 ||           Travaux en cours/à venir dans votre région           ||
                 ||                      Ville de Montréal                         ||
@@ -85,6 +100,14 @@ public class DisplayResident {
                 ||                                                                ||
                 \\\\================================================================//
                         Votre choix :   """);
+
+
+        try {
+            final String system = System.getProperty("os.name").toLowerCase();
+            if (system.contains("windows")) {
+                Runtime.getRuntime().exec("cls");
+            }
+        }catch (Exception e) {}
     }
 
 }
