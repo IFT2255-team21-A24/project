@@ -8,7 +8,8 @@ public class InsertData {
     private static String admin = DataForConnection.USER.getUrl();
     private static String access = DataForConnection.KEY.getUrl();
     public void insertion (String first_name, String last_name, String residential_adress, String electronic_adress,
-                           String phone_number, LocalDate date_naissance, String passwordHash, String usernameDB) {
+                           String phone_number, LocalDate date_naissance, String passwordHash, String usernameDB,
+                           int cityNumber) {
 
         Connection conn = null;
         PreparedStatement ps = null;
@@ -33,7 +34,7 @@ public class InsertData {
                 int userID = rs.getInt(1);
                 sqlInsert = "INSERT INTO `User Information` (`Loggin Credentials_UserID`, " +
                         "FirstName, LastName, ResidentialAddress, ElectronicAddress," +
-                        "PhoneNumber, BirthDate) VALUES (?,?,?,?,?,?,?)";
+                        "PhoneNumber, BirthDate, CityNumber) VALUES (?,?,?,?,?,?,?,?)";
                 ps = conn.prepareStatement(sqlInsert);
                 ps.setInt(1, userID);
                 ps.setString(2, first_name);
@@ -42,6 +43,7 @@ public class InsertData {
                 ps.setString(5, electronic_adress);
                 ps.setString(6, phone_number);
                 ps.setDate(7, java.sql.Date.valueOf(date_naissance));
+                ps.setInt(8, cityNumber);
                 ps.executeUpdate();
             }
 
