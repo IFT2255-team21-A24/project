@@ -1,5 +1,7 @@
 package ca.umontreal.dir.ift2255.team21.databasehandler;
 import ca.umontreal.dir.ift2255.team21.accounts.Account;
+import ca.umontreal.dir.ift2255.team21.accounts.Manager;
+import ca.umontreal.dir.ift2255.team21.accounts.Resident;
 
 import java.sql.*;
 public class ConnectionCheck {
@@ -33,20 +35,29 @@ public class ConnectionCheck {
 
             // Exécuter la requête et récupérer les résultats dans un ResultSet
             resultSet = preparedStatement.executeQuery();
+            System.out.println(resultSet);
 
             // Vérifier si un utilisateur est trouvé
             if (resultSet.next() && PasswordHash.checkPassword(hash, resultSet.getString("password"))) {
                 //Recover User Data for the session
                 String queryFromData = "SELECT * FROM `User Information` WHERE `Loggin Credentials_UserID` = ?";
                 preparedStatement = connection.prepareStatement(queryFromData);
+                System.out.println(resultSet.getString("UserID"));
                 preparedStatement.setString(1, resultSet.getString("UserID"));
 
                 ResultSet userData = preparedStatement.executeQuery();
-
-                user = new Account(userData.getString("FirstName"), userData.getString("LastName"),
-                        userData.getString("ResidentialAddress"), userData.getString("ElectronicAddress"),
-                        userData.getString("PhoneNumber"), userData.getInt("Loggin Credentials_UserID"),
-                        userData.getDate("BirthDate"));
+                userData.next();
+                if (userData.getInt("CityNumber") == -1) {
+                    user = new Resident (userData.getString("FirstName"), userData.getString("LastName"),
+                            userData.getString("ResidentialAddress"), userData.getString("ElectronicAddress"),
+                            userData.getString("PhoneNumber"), userData.getInt("Loggin Credentials_UserID"),
+                            userData.getDate("BirthDate"));
+                }else {
+                    user = new Manager(userData.getString("FirstName"), userData.getString("LastName"),
+                            userData.getString("ResidentialAddress"), userData.getString("ElectronicAddress"),
+                            userData.getString("PhoneNumber"), userData.getInt("Loggin Credentials_UserID"),
+                            userData.getDate("BirthDate"), userData.getInt("CityNumber"));
+                }
             }
 
         } catch (Exception e) {
@@ -61,7 +72,6 @@ public class ConnectionCheck {
                 e.printStackTrace();
             }
         }
-        System.out.println(user.toString());
         return user;
     }
 }

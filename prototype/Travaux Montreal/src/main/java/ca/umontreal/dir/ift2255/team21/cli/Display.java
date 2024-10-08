@@ -1,10 +1,11 @@
 package ca.umontreal.dir.ift2255.team21.cli;
 import ca.umontreal.dir.ift2255.team21.accounts.Account;
+import ca.umontreal.dir.ift2255.team21.accounts.Manager;
+import ca.umontreal.dir.ift2255.team21.accounts.Resident;
 import ca.umontreal.dir.ift2255.team21.databasehandler.ConnectionCheck;
 
 import java.util.*;
 import java.lang.*;
-import java.io.*;
 public class Display {
     public void introScreen() throws Exception{
         Scanner choice = new Scanner(System.in);
@@ -36,8 +37,12 @@ public class Display {
 
         menuChoice = choice.nextInt();
 
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
+        try {
+            final String system = System.getProperty("os.name").toLowerCase();
+            if (system.contains("windows")) {
+                Runtime.getRuntime().exec("cls");
+            }
+        }catch (Exception e) {}
 
         if (menuChoice != 1 && menuChoice != 2) {
             introScreen();
@@ -63,43 +68,16 @@ public class Display {
         if (account == null) {
             System.out.println("pas de donnée");
         }else{
+            if (account instanceof Resident) {
+                DisplayResident displayResident = new DisplayResident();
+                displayResident.homePageResident((Resident)account);
+            }else if (account instanceof Manager) {
+                DisplayManager displayManager = new DisplayManager();
+                displayManager.homePageManager((Manager) account);
+
+            }
 
         }
 
     }
-
-    public void homePageResident() {
-        Scanner input = new Scanner(System.in);
-        System.out.println("""
-                //======================================================\\\\
-                ||           Nouveautés sur les constructions           ||
-                ||                 Dans votre régions :                 ||
-                ||------------------------------------------------------||
-                ||                                                      ||
-                ||                    NOTIFICATIONS:                    ||
-                ||                                                      ||
-                ||    La requête que vous avez dépose est : Acceptée    ||
-                ||              Date de début : 19-10-2024              ||
-                ||                                                      ||
-                ||------------------------------------------------------||
-                ||                                                      ||
-                ||              Rue Sainte-Catherine Est :              ||
-                ||      Objectif : Réparer l'aqueduc au croisement      ||
-                ||                 Sainte-Catherine Est / Berri.        ||
-                ||            Date de fin prévu : 23-01-2025            ||
-                ||                                                      ||
-                ||                    Rue Durocher :                    ||
-                ||       Objectif : Réparation des tuyaux de gaz.       ||
-                ||            Date de fin prévu : 03-11-2024            ||
-                ||                                                      ||
-                ||------------------------------------------------------||
-                ||  1) Consultation des travaux en cours/à venir.       ||
-                ||  2) Soumission de requête                            ||
-                ||  3) Planification participative                      ||
-                ||  4) Signalisation de problème                        ||
-                ||                                                      ||
-                \\\\======================================================//
-                        Votre choix :""");
-    }
-
 }

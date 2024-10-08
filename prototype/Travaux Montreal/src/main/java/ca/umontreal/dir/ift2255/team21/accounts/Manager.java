@@ -9,4 +9,11 @@ public class Manager extends Account{
         super(first_name, last_name, residential_adress, electronic_adress, phone_number, id, date_naissance);
         this.city_indentification = city_indentification;
     }
+
+    @Override
+    public String toString() {
+        return "Manager{" +
+                "city_indentification=" + city_indentification +
+                '}';
+    }
 }
