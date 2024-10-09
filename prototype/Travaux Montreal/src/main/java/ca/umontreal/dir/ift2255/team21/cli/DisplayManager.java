@@ -47,12 +47,7 @@ public class DisplayManager {
 
         choice = input.nextInt();
 
-        try {
-            final String system = System.getProperty("os.name").toLowerCase();
-            if (system.contains("windows")) {
-                Runtime.getRuntime().exec("cls");
-            }
-        }catch (Exception e) {}
+        clearScreen();
     }
     public void travauxManager(Manager manager) {
         System.out.print("""
@@ -97,6 +92,56 @@ public class DisplayManager {
                 \\\\================================================================//
                         Votre choix :   """);
 
+        clearScreen();
+    }
+
+    public void soumissionRequete(Manager manager) {
+        System.out.println("""
+                //=============================================================\\\\
+                ||           Soumission de requête pour un projet              ||
+                ||                 Ville de Montréal                           ||
+                ||-------------------------------------------------------------||
+                ||                                                             ||
+                ||   1) Nom du projet : _________________________________      ||
+                ||                                                             ||
+                ||   2) Localisation du projet : ________________________      ||
+                ||                                                             ||
+                ||   3) Type de projet :                                       ||
+                ||      [ ] Réparation de routes                               ||
+                ||      [ ] Réseau d'aqueduc                                   ||
+                ||      [ ] Conduites de gaz                                   ||
+                ||      [ ] Installation de lampadaires                        ||
+                ||      [ ] Autre : ___________________________________        ||
+                ||                                                             ||
+                ||   4) Quartiers affectés :                                   ||
+                ||      [ ] Centre-Ville                                       ||
+                ||      [ ] Plateau-Mont-Royal                                 ||
+                ||      [ ] Rosemont                                           ||
+                ||      [ ] Outremont                                          ||
+                ||      [ ] Hochelaga-Maisonneuve                              ||
+                ||      [ ] Autre : __________________________________         ||
+                ||                                                             ||
+                ||   5) Rues affectées : _________________________________     ||
+                ||                       ___________________________________   ||
+                ||                                                             ||
+                ||   6) Date de début : ____/____/______                       ||
+                ||                                                             ||
+                ||   7) Date de fin : ____/____/______                         ||
+                ||                                                             ||
+                ||   8) Horaire des travaux : _____________________________    ||
+                ||                         _________________________________   ||
+                ||                                                             ||
+                ||-------------------------------------------------------------||
+                ||                                                             ||
+                ||   [Envoyer le projet]   [Annuler]                           ||
+                ||                                                             ||
+                \\\\===========================================================//
+                        Votre choix :   """);
+
+        clearScreen();
+    }
+
+    public static void clearScreen() {
         try {
             final String system = System.getProperty("os.name").toLowerCase();
             if (system.contains("windows")) {

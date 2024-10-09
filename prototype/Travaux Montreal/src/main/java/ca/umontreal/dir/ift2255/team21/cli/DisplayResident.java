@@ -40,12 +40,7 @@ public class DisplayResident {
                 \\\\======================================================//
                         Votre choix :   """);
         choice = input.nextInt();
-        try {
-            final String system = System.getProperty("os.name").toLowerCase();
-            if (system.contains("windows")) {
-                Runtime.getRuntime().exec("cls");
-            }
-        }catch (Exception e) {}
+        clearScreen();
         switch (choice){
             case 1:
                 travauxResident(resident);
@@ -102,6 +97,43 @@ public class DisplayResident {
                         Votre choix :   """);
 
 
+        clearScreen();
+    }
+    public void soumissionRequete(Resident resident) {
+        System.out.println("""
+                //=============================================================\\\\
+                ||           Soumission de requête pour un projet              ||
+                ||                 Ville de Montréal                           ||
+                ||-------------------------------------------------------------||
+                ||                                                             ||
+                ||   1) Nom du projet : _________________________________      ||
+                ||                                                             ||
+                ||   2) Localisation du projet : ________________________      ||
+                ||                                                             ||
+                ||   3) Type de projet :                                       ||
+                ||      [ ] Réparation de routes                               ||
+                ||      [ ] Réseau d'aqueduc                                   ||
+                ||      [ ] Conduites de gaz                                   ||
+                ||      [ ] Installation de lampadaires                        ||
+                ||      [ ] Autre : ___________________________________        ||
+                ||                                                             ||
+                ||   4) Date de début souhaité : ____/____/______              ||
+                ||                                                             ||
+                ||   5) Détails supplémentaires : ________________________     ||
+                ||                            ____________________________     ||
+                ||                                                             ||
+                ||-------------------------------------------------------------||
+                ||                                                             ||
+                ||   [Envoyer le projet]   [Annuler]                           ||
+                ||                                                             ||
+                \\\\===========================================================//
+                        Votre choix :   """);
+
+
+        clearScreen();
+    }
+
+    public static void clearScreen() {
         try {
             final String system = System.getProperty("os.name").toLowerCase();
             if (system.contains("windows")) {

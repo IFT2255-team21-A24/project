@@ -37,12 +37,7 @@ public class Display {
 
         menuChoice = choice.nextInt();
 
-        try {
-            final String system = System.getProperty("os.name").toLowerCase();
-            if (system.contains("windows")) {
-                Runtime.getRuntime().exec("cls");
-            }
-        }catch (Exception e) {}
+        clearScreen();
 
         if (menuChoice != 1 && menuChoice != 2) {
             introScreen();
@@ -68,12 +63,7 @@ public class Display {
         if (account == null) {
             System.out.println("pas de donnée");
         }else{
-            try {
-                final String system = System.getProperty("os.name").toLowerCase();
-                if (system.contains("windows")) {
-                    Runtime.getRuntime().exec("cls");
-                }
-            }catch (Exception e) {}
+            clearScreen();
             if (account instanceof Resident) {
                 DisplayResident displayResident = new DisplayResident();
                 displayResident.homePageResident((Resident)account);
@@ -85,5 +75,13 @@ public class Display {
 
         }
 
+    }
+    public static void clearScreen() {
+        try {
+            final String system = System.getProperty("os.name").toLowerCase();
+            if (system.contains("windows")) {
+                Runtime.getRuntime().exec("cls");
+            }
+        }catch (Exception e) {}
     }
 }
