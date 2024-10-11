@@ -104,21 +104,31 @@ public class DisplayResident {
                 ||                                                                ||
                 ||   1) Plus de détails sur un projet                             ||
                 ||   2) Rechercher un/des projet(s)                               ||
-                ||   3) Proposer un ajustement pour un projet                     ||
-                ||   4) Signaler une problème                                     ||
-                ||   5) Revenir à l'accueil                                       ||
+                ||   3) Signaler une problème                                     ||
+                ||   4) Revenir à l'accueil                                       ||
                 ||                                                                ||
                 \\\\================================================================//
                         Votre choix :   """);
         choice = scanner.nextInt();
+        clearScreen();
         switch (choice){
             case 1:
-                rechercheTravaux(resident);
+                exempleTravaux(resident);
                 break;
             case 2:
                 rechercheTravaux(resident);
                 break;
-                
+            case 3:
+                signalisationProbleme(resident);
+                break;
+            case 4:
+                homePageResident(resident);
+                break;
+            default:
+                System.err.println("Votre choix est introuvable");
+                travauxResident(resident);
+                break;
+
         }
 
 
@@ -151,17 +161,21 @@ public class DisplayResident {
                 ||                                                             ||
                 ||-------------------------------------------------------------||
                 ||                                                             ||
-                ||   8) Envoyer le signalement                                 ||
+                ||   8) Envoyer la requête                                     ||
                 ||   9) Annuler                                                ||
                 ||                                                             ||
                 \\\\=============================================================//
                         Votre choix :   """);
         choice = scanner.nextInt();
         clearScreen();
-        homePageResident(resident);
-
-
-        clearScreen();
+        switch (choice){
+            case 8,9:
+                homePageResident(resident);
+                break;
+            default:
+                System.err.println("Votre choix est introuvable");
+                soumissionRequete(resident);
+        }
     }
     public void rechercheTravaux(Resident resident) {
         Scanner scanner = new Scanner(System.in);
@@ -235,7 +249,15 @@ public class DisplayResident {
                         Votre choix :   """);
         choice = scanner.nextInt();
         clearScreen();
-        homePageResident(resident);
+        switch (choice){
+            case 8,9:
+                homePageResident(resident);
+                break;
+            default:
+                System.err.println("Votre choix est introuvable");
+                soumissionRequete(resident);
+        }
+
 
     }
 
@@ -270,7 +292,56 @@ public class DisplayResident {
                         Votre choix :   """);
         choice = scanner.nextInt();
         clearScreen();
-        homePageResident(resident);
+        switch (choice){
+            case 1,2,3,0:
+                homePageResident(resident);
+                break;
+            default:
+                System.err.println("Votre choix est introuvable");
+                soumissionRequete(resident);
+        }
+    }
+    public void exempleTravaux(Resident resident) {
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+        System.out.println("""
+                //======================================================================\\\\
+                ||                    Détails d'un chantier en cours                    ||
+                ||                           Ville de Montréal                          ||
+                ||----------------------------------------------------------------------||
+                ||                                                                      ||
+                ||   1) Titre du projet : Réparation des conduites d'eau                ||
+                ||                                                                      ||
+                ||   2) Type de travaux : Remplacement des conduites d'eau              ||
+                ||                                                                      ||
+                ||   3) Quartier affecté : Plateau-Mont-Royal                           ||
+                ||                                                                      ||
+                ||   4) Rue(s) affectée(s) : Avenue du Parc, Rue Rachel                 ||
+                ||                                                                      ||
+                ||   5) Date de début : 05/10/2024                                      ||
+                ||                                                                      ||
+                ||   6) Date de fin prévue : 20/12/2024                                 ||
+                ||                                                                      ||
+                ||   7) Horaire des travaux : Lundi - Vendredi, 7h à 17h                ||
+                ||                                                                      ||
+                ||   8) Intervenant responsable : Jean Tremblay                         ||
+                ||                                                                      ||
+                ||   9) Contact pour plus d'informations : travaux@montreal.ca          ||
+                ||                                                                      ||
+                ||----------------------------------------------------------------------||
+                ||                                                                      ||
+                ||   0) Retourner à la liste des travaux                                ||
+                ||                                                                      ||
+                \\\\======================================================================//
+                        Votre choix :   """);
+        choice = scanner.nextInt();
+        clearScreen();
+        if (choice == 0){
+            homePageResident(resident);
+        }else{
+            System.err.println("Votre choix est introuvable!\n");
+            exempleTravaux(resident);
+        }
     }
 
 }
