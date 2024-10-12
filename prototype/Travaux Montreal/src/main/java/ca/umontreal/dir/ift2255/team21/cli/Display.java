@@ -6,8 +6,19 @@ import ca.umontreal.dir.ift2255.team21.databasehandler.ConnectionCheck;
 
 import java.util.*;
 import java.lang.*;
+
+/**
+ * !! NE PAS EFFACER !!
+ *
+ * DATA pour test
+ * Username : Password
+ * luc : test
+ * marie : Marie
+ * jeanR : Roy_1975
+ */
+
 public class Display {
-    public void introScreen() throws Exception{
+    public void introScreen(){
         Scanner choice = new Scanner(System.in);
         int menuChoice = 0;
 
@@ -40,6 +51,7 @@ public class Display {
         clearScreen();
 
         if (menuChoice != 1 && menuChoice != 2) {
+            System.err.println("Erreur d'entrée");
             introScreen();
         }else if(menuChoice == 1){
             seConnecter();
@@ -61,7 +73,8 @@ public class Display {
 
         account = ConnectionCheck.checkForUser(username, password);
         if (account == null) {
-            System.out.println("pas de donnée");
+            System.out.println("Utilisateur non trouvé ou mot de passe incorrect.\n");
+            erreurConnection();
         }else{
             clearScreen();
             if (account instanceof Resident) {
@@ -75,6 +88,20 @@ public class Display {
 
         }
 
+    }
+    public void erreurConnection(){
+        Scanner input = new Scanner(System.in);
+        String choice = "";
+        System.out.println("Voulez-vous vous réessayer (Y/N) ?");
+        choice = input.nextLine();
+        if (choice.equalsIgnoreCase("Y")) {
+            seConnecter();
+        }else if (choice.equalsIgnoreCase("N")) {
+            introScreen();
+        }else {
+            System.err.println("Erreur de choix.\n");
+            erreurConnection();
+        }
     }
     public static void clearScreen() {
         try {

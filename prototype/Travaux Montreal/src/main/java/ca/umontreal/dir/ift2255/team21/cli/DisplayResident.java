@@ -55,6 +55,7 @@ public class DisplayResident {
                 signalisationProbleme(resident);
                 break;
             case 5:
+                resident = null;
                 break;
             default:
                 System.out.println("Votre choix est introuvable");
