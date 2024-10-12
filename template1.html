@@ -1693,7 +1693,8 @@
                 <div>
                     <h3 class="subsection-title">Solution de stockage</h3>
                     <p>
-                        <em>Base de données pour stocker les informations des résidents, les requêtes et les travaux..</em>
+                        Le solition de stockage choisi est une base de donnée MySQL sur AWS afin de mieux gérer les informations et de pouvoir créer des
+                        tableaux relationnels afin de faciliter la circulation des informations sur un projet de grande taille.
                     </p>
                 </div>
 
@@ -1701,8 +1702,9 @@
                     <h3 class="subsection-title">Solution d'intégration</h3>
 
                     <p>
-                        <em>API pour permettre aux intervenants de soumettre et mettre à jour les projets directement depuis leurs systèmes.
-                        </em>
+                        Pour la mise à jour des projets et des données personnels/utilisateurs, une connection se fait à la base de donnée sur AWS et prends seulement
+                        les informations nécessaires. Par exemple, une fois qu'un utilisateur se connecte, seul ses informations ainsi que des informations
+                        concernant des projets reliés à cet utilisateurs sont acquéri et ce seulement pour la durée de la connection.
                     </p>
                 </div>
             </section>
@@ -1711,8 +1713,11 @@
                 <h2 id="prototype" class="section-title">Prototype</h2>
 
                 <p>
-                    <em>
-                        Indiquez ici les informations nécessaires (commande d'exécution, comptes préconfigurées) pour exécuter et tester le prototype</em>.
+                        Pour exécutier l'application, il faut ouvrir le projet qui s'appelle "Travaux Montreal" dans le dossier prototype avec soit IntelliJ ou un autre IDE.
+                        Par la suite, les "credentials" de connection sont dans le fichier main en commentaire au début du code. Ce sont les seuls accès que le programme permet
+                        étant donnée qu'il va automatiquement vérifier si les données existent dans la base de donnée de AWS.
+
+                        Il n'y a pas de démarches à faire pour la base de donnée étant donnée que l'address IP est publique et que la base de donnée est déjà en marche.
                 </p>
             </section>
         </div>
