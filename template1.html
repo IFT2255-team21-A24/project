@@ -378,6 +378,9 @@
             .persona-type--eco {
                 background-color: #88B04B;
             }
+            .persona-type--etu {
+                background-color: #ADD8E6;
+            }
 
             .persona-market {
                 display: flex; align-items: center; justify-content: center;
@@ -589,7 +592,7 @@
 
             <ul class="bare-list report-resources">
                 <li class="report-resource">
-                    <a class="report-resource-link" href="#" target="_blank">
+                    <a class="report-resource-link" href="https://github.com/IFT2255-team21-A24/project" target="_blank">
                         Répertoire GitHub
                     </a>
                 </li>
@@ -673,30 +676,20 @@
                 <h3 class="subsection-title">Introduction</h3>
                 <p>
                     <em>
-                        Le projet "MaVille" vise à optimiser la communication entre les différents acteurs impliqués dans les travaux publics et privés à Montréal.
-                        <br> Le contexte actuel montre que les travaux sont souvent mal planifiés et créent des perturbations importantes pour les citoyens.
-
+                        Les travaux publics et privés sont une réalité incontournable à Montréal, mais leur impact sur la vie quotidienne des 
+                        résidents reste problématique. Souvent mal coordonnés et annoncés tardivement, ces chantiers provoquent 
+                        des perturbations majeures : embouteillages, fermetures de routes, entraves pour les piétons et cyclistes, 
+                        et difficulté d’accès aux commerces. Face à ces défis, l’application MaVille se propose comme une solution 
+                        innovante pour mieux informer et impliquer les citoyens dans la gestion des travaux. 
+                        En permettant aux résidents de consulter les projets en cours, de recevoir des notifications personnalisées,
+                         et même de partager leurs préférences en matière de planification, MaVille aspire à transformer 
+                         l’expérience des travaux en un processus transparent et collaboratif, réduisant ainsi les frustrations 
+                         et améliorant la qualité de vie des citoyens montréalais.
                     </em>
                 </p>
                 <h3 class="subsection-title">Échéancier</h3>
                 <p>
-                    <em><pre>
-                        ___________ |  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10 |  11 |  12 |
-                        YBY, OM, ABR|########### (Étude du domaine)
-                        YBY, ABR    |     ########### (Préparation des questions)
-                        OM          | ########### (Glossaire)
-                        YBY         |   ################### (Diagramme de CUs + scénarios)
-                        YBY, OM     |   ################### (Diagramme d'activités)
-                        ABR         |   ################### (Prototype)
-                        ABR         |                  #### (README)
-                        OM          |              ######## (Analyse)
-                        YBY         |              ######### (Rédaction du rapport)
-                                    |                        ############### (Révision de l'analyse)
-                                    |                          ###################### (Conception)
-                                    |                              ########################################## (Implémentation et tests)
-                                    |                                    ######      ###   ###   ##   ##   ## (Documentation)
-                        </pre>
-                        </em>
+                    <em> <img class="diagrammeG" src="diargeammedeG.png" alt="diagramme de gantt" width="100%" height="500"> </em>
                 </p>
 
                 <h3 class="subsection-title">Hypothèses</h3>
@@ -739,6 +732,16 @@
                     <dd class="glossary-def">Confirmation finale par les autorités municipales que les travaux sont conformes aux normes et ont été complétés avec succès.</dd>
                     <dt class="glossary-term">Suivi de projet</dt>
                     <dd class="glossary-def">Processus de surveillance continue d’un projet de travaux, comprenant l'évaluation des progrès, la gestion des délais et la résolution des problèmes.</dd>
+                    <dt class="glossary-term">Application MaVille</dt>
+                    <dd class="glossary-def">Application mobile qui permet aux résidents de Montréal de consulter, suivre et recevoir des notifications sur les travaux publics et privés en cours ou planifiés dans leur quartier.</dd>
+                    <dt class="glossary-term">Code de la ville</dt>
+                    <dd class="glossary-def">Identifiant unique attribué aux intervenants enregistrés auprès de la ville de Montréal pour leur permettre d'accéder aux fonctionnalités réservées aux professionnels dans l'application MaVille.</dd>
+                    <dt class="glossary-term">Résident</dt>
+                    <dd class="glossary-def"> Utilisateur de l'application MaVille qui vit dans la ville de Montréal et utilise l'application pour s'informer et interagir avec les informations relatives aux travaux de la ville.</dd>
+                    <dt class="glossary-term">Service Info Entraves et Travaux</dt>
+                    <dd class="glossary-def">Service public qui fournit des informations sur les entraves à la circulation causées par les travaux, disponible pour les résidents de Montréal en dehors de l'application MaVille.</dd>
+                    <dt class="glossary-term">Type de travaux</dt>
+                    <dd class="glossary-def">Catégorie de travaux définie dans l'application, incluant les travaux routiers, d'entretien urbain, de signalisation, de transport, de télécommunication, entre autres.</dd>
                 </dl>
 
                 <h3 class="subsection-title">Persona </h3>
@@ -749,7 +752,7 @@
                             <span class="persona-name">Sarah &ndash; <em>Consultante</em></span>
                             <div class="persona-stat">
                                 <span class="persona-type persona-type--pp" title="Famille">Fam</span>
-                                <span class="persona-market">30%</span>
+                                <span class="persona-market">35%</span>
                             </div>
                         </div>
                         <span class="persona-info">Femme mariée de 34 ans vivant a Montreal</span>
@@ -767,7 +770,7 @@
                             <span class="persona-name">Ahmed &ndash; <em>Entrepreneur dans la construction</em></span>
                             <div class="persona-stat">
                                 <span class="persona-type persona-type--eco" title="Construction">Cons</span>
-                                <span class="persona-market">25%</span>
+                                <span class="persona-market">30%</span>
                             </div>
                         </div>
                         <span class="persona-info">Homme celibataire de 27 ans vivant a Montreal</span>
@@ -777,6 +780,24 @@
                                 <li class="check">But principal : Recevoir des informations précises sur les chantiers pour organiser son travail de manière optimale.</li>
                                 <li class="check">But secondaire : Être alerté en temps réel des perturbations liées aux travaux publics pour adapter ses projets.</li>
                                 <li class="check">Avantages : Planification efficace de ses propres chantiers et minimisation des retards causés par d'autres travaux.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="persona">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                        <span class="persona-name">Lea &ndash; <em>Étudiante</em></span>
+                        <div class="persona-stat">
+                            <span class="persona-type persona-type--etu" title="Etudiante">Etude</span>
+                            <span class="persona-market">35%</span>
+                        </div>
+                    </div>
+                    <span class="persona-info">Femme célibataire de 21 ans vivant à Montréal et utilisant principalement les transports en commun et les trajets à pied.</span>
+                        <div class="persona-goal">
+                            <h4 class="persona-title">Buts</h4>
+                            <ul class="bare-list">
+                                <li class="check">But principal :  Éviter les zones de travaux pour minimiser les retards dans ses trajets vers l’université et ses activités.</li>
+                                <li class="check">But secondaire : Recevoir des alertes sur les travaux affectant les arrêts de transport en commun et les zones piétonnes.</li>
+                                <li class="check">Avantages : Gérer ses déplacements pour arriver à l’heure et éviter les imprévus liés aux travaux.</li>
                             </ul>
                         </div>
                     </li>
@@ -1736,11 +1757,6 @@
             Devoir 1 &ndash; Analyse des exigences<br>
             IFT2255 (Génie logiciel) <br>
             Automne 2024
-        </p>
-        <p>
-            <em>
-                Ajoutez tous les liens additionnels nécessaires à la compréhension du rapport ici
-            </em>
         </p>
     </footer>
 </body>
