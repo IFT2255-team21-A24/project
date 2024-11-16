@@ -1,22 +1,25 @@
 package ca.umontreal.dir.ift2255.team21.distancecalculator;
 import ca.umontreal.dir.ift2255.team21.entraves.Entraves;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import java.io.IOException;
-import io.javalin.Javalin;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
 public class CalculateDistance {
 
     private String key = "AIzaSyAgCK4KJXdSOjAUL5jKwyRxY3cIaBSsWlE";
 
-    //public Entraves[] listerEntraves() {}
+    public ArrayList<Entraves> listerEntraves() {
+        ArrayList<Entraves> entravesProches = new ArrayList<>();
 
-    private Entraves[] appelAPI() {
-        var app = Javalin.create().start(7000);
-        app.get("/output", ctx -> {
-            // some code
-            //ctx.json(object);
-        });
-        return null;
+        return entravesProches;
     }
+
+
 }
