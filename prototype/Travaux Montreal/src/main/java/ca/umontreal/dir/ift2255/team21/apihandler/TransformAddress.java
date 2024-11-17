@@ -1,5 +1,7 @@
 package ca.umontreal.dir.ift2255.team21.apihandler;
 
+import ca.umontreal.dir.ift2255.team21.databasehandler.DataForConnection;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -30,9 +32,8 @@ public class TransformAddress {
 
     @NotNull
     private static JSONObject getJsonObject(String address) throws IOException {
-        String key = "AIzaSyAgCK4KJXdSOjAUL5jKwyRxY3cIaBSsWlE";
         String url = "https://maps.googleapis.com/maps/api/geocode/json?address="
-                + address.replace(" ", "+") + "&key=" + key;
+                + address.replace(" ", "+") + "&key=" + DataForConnection.GOOGLEKEY.getUrl();
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         connection.setRequestMethod("GET");
 
