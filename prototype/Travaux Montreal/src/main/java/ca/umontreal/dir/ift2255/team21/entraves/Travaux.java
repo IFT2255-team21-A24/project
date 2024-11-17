@@ -8,32 +8,64 @@ public class Travaux {
     private double latitude;
     private Date dateDebut;
     private Date dateFin;
+    private String boroughid;
+    private String currentstatus;
+    private String reason_category;
+    private String submitcategory;
+    private String organisationname;
 
-    public Travaux(String id, double longitude, double latitude, Date dateDebut, Date dateFin) {
+    public Travaux(String id, double longitude, double latitude, Date dateDebut, Date dateFin,
+                   String boroughid, String currentstatus, String reason_category,
+                   String submitcategory, String organisationname) {
         this.id = id;
         this.longitude = longitude;
         this.latitude = latitude;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
+        this.boroughid = boroughid;
+        this.currentstatus = currentstatus;
+        this.reason_category = reason_category;
+        this.submitcategory = submitcategory;
+        this.organisationname = organisationname;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getId() {
+        return id;
     }
 
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setDateDebut(Date dateDebut) {
-        this.dateDebut = dateDebut;
+    public Date getDateDebut() {
+        return dateDebut;
     }
 
-    public void setDateFin(Date dateFin) {
-        this.dateFin = dateFin;
+    public Date getDateFin() {
+        return dateFin;
+    }
+
+    public String getBoroughid() {
+        return boroughid;
+    }
+
+    public String getCurrentstatus() {
+        return currentstatus;
+    }
+
+    public String getReason_category() {
+        return reason_category;
+    }
+
+    public String getSubmitcategory() {
+        return submitcategory;
+    }
+
+    public String getOrganisationname() {
+        return organisationname;
     }
 }

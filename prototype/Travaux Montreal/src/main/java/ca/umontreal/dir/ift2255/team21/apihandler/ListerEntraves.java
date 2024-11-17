@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ListerEntraves {
-    private ArrayList<Entraves> appelAPI() {
+    public static ArrayList<Entraves> appelAPI() {
         ArrayList<Entraves> entraves = new ArrayList<>();
         try {
             // Créer un client HTTP
@@ -36,48 +36,45 @@ public class ListerEntraves {
 
             // Utiliser Jackson pour analyser la réponse JSON
             ObjectMapper mapper = new ObjectMapper();
-            JsonNode rootNode = mapper.readTree(response.body());  // Convertir la réponse en arbre JSON
-            JsonNode rootNode2 = mapper.readTree(response2.body());  // Convertir la réponse 2 en arbre JSON
+            JsonNode rootNode = mapper.readTree(response.body());  // Convertir les entraves en arbre JSON
+            JsonNode rootNode2 = mapper.readTree(response2.body());  // Convertir les travaux en arbre JSON
 
             // Extraire les objets "records" de chaque réponse
-            JsonNode recordsNode = rootNode.path("result").path("records");
-            JsonNode recordsNode2 = rootNode2.path("result").path("records");
+            JsonNode recordsNode = rootNode.path("result").path("records"); //entraves
+            JsonNode recordsNode2 = rootNode2.path("result").path("records"); // travaux
+            System.out.println(recordsNode.toString());
 
-            // Créer une map pour lier les entrées entre recordsNode et recordsNode2 avec l'id
-            Map<String, JsonNode> recordsMap = new HashMap<>();
-            if (recordsNode2.isArray()) {
-                for (JsonNode record : recordsNode2) {
-                    // Ajouter les éléments de recordsNode2 à la map avec l'id
-                    String id = record.path("id").asText();
-                    recordsMap.put(id, record);
-                }
-            }
-
-            // Traiter recordsNode et remplir le tableau entraves
             if (recordsNode.isArray()) {
                 for (JsonNode record : recordsNode) {
-                    String idRequest = record.path("id_request").asText();  // id_request dans recordsNode
-                    JsonNode linkedRecord = recordsMap.get(idRequest);  // Chercher l'objet correspondant dans recordsNode2
+                    // Ajouter les éléments de recordsNode à la map avec "id_request"
 
-                    if (linkedRecord != null) {
-                        // Extraire les données des deux objets
-                        String streetimpact = record.path("streetimpacttype").asText();
-                        String streetid = record.path("streetid").asText();
-                        double longitude = linkedRecord.path("longitude").asDouble();
-                        double latitude = linkedRecord.path("latitude").asDouble();
-                        String id = linkedRecord.path("id").asText();
-
-                        // Convertir les dates au format SQL
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        Date dateDebut = Date.valueOf(sdf.format(sdf.parse(linkedRecord.path("duration_start_date").asText())));
-                        Date dateFin = Date.valueOf(sdf.format(sdf.parse(linkedRecord.path("duration_end_date").asText())));
-
-                        // Créer un nouvel objet Entraves et l'ajouter à la liste
-                        Entraves entrave = new Entraves(id, streetid, longitude, latitude, streetimpact, dateDebut, dateFin);
-                        entraves.add(entrave);
-                    }
                 }
             }
+
+//            // Traiter recordsNode2 et remplir le tableau entraves
+//            if (recordsNode2.isArray()) {
+//                for (JsonNode record2 : recordsNode2) {
+//                    String id = record2.path("id").asText();  // id dans recordsNode2
+//                    JsonNode linkedRecord = recordsMap.get(id);  // Chercher l'objet correspondant dans recordsNode
+//
+//                    if (linkedRecord != null) {
+//                        // Extraire les données des deux objets
+//                        String streetimpact = linkedRecord.path("streetimpacttype").asText();
+//                        String streetid = linkedRecord.path("streetid").asText();
+//                        double longitude = record2.path("longitude").asDouble();
+//                        double latitude = record2.path("latitude").asDouble();
+//
+//                        // Convertir les dates au format SQL
+//                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                        Date dateDebut = Date.valueOf(sdf.format(sdf.parse(record2.path("duration_start_date").asText())));
+//                        Date dateFin = Date.valueOf(sdf.format(sdf.parse(record2.path("duration_end_date").asText())));
+//
+//                        // Créer un nouvel objet Entraves et l'ajouter à la liste
+//                        Entraves entrave = new Entraves(id, streetid, longitude, latitude, streetimpact, dateDebut, dateFin);
+//                        entraves.add(entrave);
+//                    }
+//                }
+//            }
 
         } catch (Exception e) {
             e.printStackTrace();
