@@ -22,7 +22,7 @@ public class InsertData {
             conn = DriverManager.getConnection(jdbcUrl, admin, access);
 
 
-            String sqlInsert = "INSERT INTO `Loggin Credentials` (password, username) VALUES (?,?)";
+            String sqlInsert = "INSERT INTO `Loggin Credentials` (password, email) VALUES (?,?)";
             ps = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
             ps.setString(2, usernameDB);
             ps.setString(1, passwordHash);
@@ -32,7 +32,7 @@ public class InsertData {
 
             if (rs.next()) {
                 int userID = rs.getInt(1);
-                sqlInsert = "INSERT INTO `User Information` (`Loggin Credentials_UserID`, " +
+                sqlInsert = "INSERT INTO `User Information` (`UserID`, " +
                         "FirstName, LastName, ResidentialAddress, ElectronicAddress," +
                         "PhoneNumber, BirthDate, CityNumber) VALUES (?,?,?,?,?,?,?,?)";
                 ps = conn.prepareStatement(sqlInsert);

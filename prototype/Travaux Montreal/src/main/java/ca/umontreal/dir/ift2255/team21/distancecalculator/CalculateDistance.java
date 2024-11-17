@@ -13,7 +13,6 @@ import java.util.*;
 
 public class CalculateDistance {
 
-    private String key = "AIzaSyAgCK4KJXdSOjAUL5jKwyRxY3cIaBSsWlE";
 
     public ArrayList<Entraves> listerEntraves() {
         ArrayList<Entraves> entravesProches = new ArrayList<>();
