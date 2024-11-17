@@ -36,19 +36,18 @@ public class ListerEntraves {
 
             // Utiliser Jackson pour analyser la réponse JSON
             ObjectMapper mapper = new ObjectMapper();
-            JsonNode rootNode = mapper.readTree(response.body());  // Convertir la réponse en arbre JSON
-            JsonNode rootNode2 = mapper.readTree(response2.body());  // Convertir la réponse 2 en arbre JSON
+            JsonNode rootNode = mapper.readTree(response.body());  // Convertir les entraves en arbre JSON
+            JsonNode rootNode2 = mapper.readTree(response2.body());  // Convertir les travaux en arbre JSON
 
             // Extraire les objets "records" de chaque réponse
-            JsonNode recordsNode = rootNode.path("result").path("records");
-            JsonNode recordsNode2 = rootNode2.path("result").path("records");
+            JsonNode recordsNode = rootNode.path("result").path("records"); //entraves
+            JsonNode recordsNode2 = rootNode2.path("result").path("records"); // travaux
             System.out.println(recordsNode.toString());
 
             if (recordsNode.isArray()) {
                 for (JsonNode record : recordsNode) {
                     // Ajouter les éléments de recordsNode à la map avec "id_request"
-                    String idRequest = record.path("id_request").asText();
-                    System.out.println(idRequest);
+
                 }
             }
 
