@@ -696,8 +696,8 @@
                 <p>
                     <em><ul>
                         <li><strong>Utilisateurs</strong> : L'application sera principalement utilisée par des résidents de Montréal.</li>
-                        <li><strong>Notifications</strong> : Les utilisateurs veulent des notifications en temps réel sur les travaux.</li>
-                        <li><strong>Mises à jour</strong> : Les informations sur les travaux seront mises à jour quotidiennement.</li>
+                        <li><strong>Accès Hors Ligne</strong> : Les utilisateurs souhaitent accéder aux informations des travaux même sans connexion Internet, grâce à une mise en cache des données récentes.</li>
+                        <li><strong>Accès aux Historique des Travaux</strong> : Les utilisateurs veulent accéder à l'historique des travaux terminés pour comprendre les améliorations récentes dans leur quartier.</li>
                       </ul>
                       </em>
                 </p>
@@ -815,6 +815,7 @@
             <ul>
                 <li><strong>Résidents :</strong> Utilisateurs principaux de l'application, cherchant à recevoir des informations sur les travaux.</li>
                 <li><strong>Intervenants :</strong> Acteurs principaux impliqués dans la réalisation des travaux, comme les entrepreneurs ou les sociétés de construction.</li>
+                <li><strong>MaVille (acteur secondaire)</strong>: Représente le système ou l'administration responsable de la gestion des inscriptions et des signalements.</li>
             </ul>
         </li>
         <li><strong>Remarque :</strong> Pour les actions autres que s'inscrire, on suppose que le résident ou l'intervenant est déjà connecté.</li>
@@ -1642,36 +1643,61 @@
 
 
 <!--------------FIN SECTION SCÉNARIO-->
-
-
-
-
-
-
-                
-                  
+            <section> 
                 <h3 class="subsection-title">Diagramme d'activités</h3>
                 <div class="activity">
                     <h4>Diagramme principal</h4>
                     <img class="activity-diagram" src="/diagrammes/Activity Diagram1.jpg" alt="Diagramme d'activités">
                 </div>
                 <div class="activity">
-                    <h4>Sous diagramme 2</h4>
+                    <h4>Consulter les travaux</h4>
                     <img class="activity-diagram" src="/diagrammes/Activity Diagram2.jpg" alt="Diagramme d'activités">
                 </div>
                 <div class="activity">
-                    <h4>Sous du diagramme 3</h4>
+                    <h4>Recherche des travaux</h4>
                     <img class="activity-diagram" src="/diagrammes/Activity Diagram3.jpg" alt="Diagramme d'activités">
                 </div>
                 <div class="activity">
-                    <h4>Sous du diagramme 4</h4>
-                    <img class="activity-diagram" src="/diagrammes/Activity Diagram4.jpg" alt="Diagramme d'activités">
-                </div>
-                <div class="activity">
-                    <h4>Sous du diagramme 5</h4>
+                    <h4>Deposer une requette</h4>
                     <img class="activity-diagram" src="/diagrammes/Activity Diagram5.jpg" alt="Diagramme d'activités">
                 </div>
             </section>
+
+<!--------------Diagramme de Classe-->
+        <section>
+            <h3 class="subsection-title" >Diagramme de Classe</h3>
+            <div>
+                <h4>Diagramme principal</h4>
+                <img src="/diagrammes/diagramme de classe.jpg" alt="Diagramme de classe" width="100%" height="500">
+            </div>
+        </section>
+
+<!--------------Diagramme de Sequence-->
+
+            <h3 class="subsection-title" >Diagramme de Sequence</h3>
+            <div>
+                <h4>Diagramme principal</h4>
+                <img src="/diagrammes/Consulter la liste des requêtes de travail .jpg" alt="Diagramme de sequence" width="100%" height="500">
+            </div>
+            <div>
+                <h4>Diagramme principal</h4>
+                <img src="/diagrammes/Diagramme de Séquence _ Consulter les Entrave.jpg" alt="Diagramme de sequence" width="100%" height="500">
+            </div>
+            <div>
+                <h4>Diagramme principal</h4>
+                <img src="/diagrammes/Soumettre une requête de travail.jpg" alt="Diagramme de sequence" width="100%" height="500">
+            </div>
+        </section>
+
+
+<!--------------Architecture c4-->
+    <section>
+     <h3 class="subsection-title" >Architecture c4</h3>
+        <div>
+            <h4>Architecture c4</h4>
+            <img src="/diagrammes/c4.PNG" alt="Architecture c4" width="100%" height="500">
+        </div>
+    </section>
 
             <section class="main-section">
                 <h2 id="analysis" class="section-title">Analyse</h2>
@@ -1679,40 +1705,55 @@
                 <div>
                     <h3 class="subsection-title">Risques</h3>
                     <ol class="risks">
-                        <li>- Risque 1 : Mauvaise adoption par les résidents.<br>
-                            - Justification : La technologie pourrait ne pas être adoptée par tous les résidents.<br>
-                            - Solution : Campagne de sensibilisation et tutoriels pour encourager l'utilisation.<br>
-                          </li>
-                        <li>- Risque 2 : Conflit entre les préférences des résidents et les nécessités des travaux.<br>
-                            - Solution : Ajouter une fonction de compromis avec des sondages auprès des résidents</li>
-                        <li>- Risque 3 : Manque de collaboration de la part des intervenants.<br>
-                            - Solution : Prévoir des protocoles de collaboration et des sanctions en cas de non-respect.
-                          </li>
-                        <li>- Risque 4 : Surutilisation des ressources du serveur.<br>
-                            - Solution : Optimiser l'application pour la consommation minimale de ressources.
-                          </li>
-                        <li>- Risque 5 : Dépendance aux notifications par courriel.<br>
-                            - Solution : Offrir d'autres canaux de notifications comme SMS.
-                          </li>
-                    </ol>
+                        <li>- Risque 1 : Adoption limitée par les résidents.<br>
+                            - Justification : Si un nombre insuffisant de résidents utilise l'application, son impact sur l'amélioration de la coordination des travaux et la satisfaction des citoyens pourrait être limité.<br>
+                            - Solution : Lancer une campagne de sensibilisation et fournir des tutoriels simples pour encourager l'utilisation.
+                        </li>
+                        <li>- Risque 2 : Non-collaboration des intervenants.<br>
+                            - Justification : Si les intervenants ne respectent pas les protocoles de collaboration ou ne mettent pas à jour leurs projets, cela peut nuire à l'efficacité de l'application.<br>
+                            - Solution : Prévoir des protocoles clairs de collaboration et introduire des incitations à la coopération.
+                        </li>
+                        <li>- Risque 3 : Surcharge des serveurs lors de pics d'activité.<br>
+                            - Justification : Un grand nombre d'utilisateurs simultanés pourrait provoquer une surcharge des serveurs, rendant l'application inaccessible.<br>
+                            - Solution : Mettre en place un mécanisme de mise en cache et prévoir une infrastructure évolutive pour gérer les pics d'utilisation.
+                        </li>
+                        <li>- Risque 4 : Informations erronées ou non mises à jour.<br>
+                            - Justification : Si les données sur les travaux ou entraves ne sont pas correctement mises à jour, les utilisateurs pourraient perdre confiance en l'application.<br>
+                            - Solution : Intégrer un processus de vérification automatique et permettre aux utilisateurs de signaler les erreurs.
+                        </li>
+                        <li>- Risque 5 : Problèmes de confidentialité des données.<br>
+                            - Justification : La collecte et le stockage des informations personnelles pourraient poser des problèmes en cas de faille de sécurité.<br>
+                            - Solution : Utiliser un cryptage fort et adopter des politiques strictes de confidentialité avec des audits réguliers.
+                        </li>
+                    </ol>                    
                 </div>
 
                 <div>
                     <h3 class="subsection-title">Besoins non-fonctionnelles</h3>
                     <ol class="nf-requirements">
-                        <li>- Accessibilité : Interface facile à utiliser même pour les utilisateurs peu à l'aise avec la technologie.
+                        <li>
+                            - <strong>Accessibilité</strong> : Interface facile à utiliser même pour les utilisateurs peu à l'aise avec la technologie.<br>
+                            <em>Justification :</em> Une interface accessible augmente l'adoption de l'application par une large audience, y compris les utilisateurs ayant peu d'expérience numérique.
                         </li>
-                        <li>- Sécurité : Protection des informations personnelles des utilisateurs.
+                        <li>
+                            - <strong>Sécurité</strong> : Protection des informations personnelles des utilisateurs.<br>
+                            <em>Justification :</em> La protection des données sensibles est essentielle pour respecter les lois sur la confidentialité  et maintenir la confiance des utilisateurs.
                         </li>
-                        <li>- Performance : L'application doit charger rapidement les informations.
+                        <li>
+                            - <strong>Performance</strong> : L'application doit charger rapidement les informations.<br>
+                            <em>Justification :</em> Une performance optimale améliore l'expérience utilisateur et réduit le risque d'abandon de l'application en cas de lenteur.
                         </li>
-                        <li>- Fiabilité : Notifications envoyées sans délai important.
+                        <li>
+                            - <strong>Fiabilité</strong> : Notifications envoyées sans délai important.<br>
+                            <em>Justification :</em> La fiabilité des notifications garantit que les utilisateurs reçoivent des informations critiques (comme des changements dans les travaux) à temps pour réagir.
                         </li>
-                        <li>- Compatibilité : Fonctionnement sur tous les navigateurs modernes.
+                        <li>
+                            - <strong>Compatibilité</strong> : Fonctionnement sur tous les navigateurs modernes.<br>
+                            <em>Justification :</em> Une compatibilité étendue garantit que l'application atteint le plus grand nombre d'utilisateurs possible, indépendamment de leur plateforme.
                         </li>
                     </ol>
                 </div>
-                
+                      
                 <div>
                     <h3 class="subsection-title">Besoins matériels</h3>
                     <p>
