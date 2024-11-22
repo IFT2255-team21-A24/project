@@ -42,4 +42,16 @@ public class Entraves {
     public double getLongitude() {
         return longitude;
     }
+
+    @Override
+    public String toString() {
+        return steetid +
+                "steetid='" + steetid + '\'' +
+                ", streetimpact='" + streetimpact + '\'' +
+                ", neighborhood='" + neighborhood + '\'' +
+                ", id_request='" + id_request + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                '}';
+    }
 }
