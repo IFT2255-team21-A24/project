@@ -5,6 +5,12 @@ import ca.umontreal.dir.ift2255.team21.accounts.Resident;
 
 import java.sql.*;
 public class ConnectionCheck {
+    /**
+     *
+     * @param access email de l'utilisateur
+     * @param hash Ici le hash est le mot de passe en plain text
+     * @return
+     */
     public static Account checkForUser(String access, String hash) {
         Account user = null;
         // Informations de connexion à la base de données
@@ -35,14 +41,12 @@ public class ConnectionCheck {
 
             // Exécuter la requête et récupérer les résultats dans un ResultSet
             resultSet = preparedStatement.executeQuery();
-            System.out.println(resultSet);
 
             // Vérifier si un utilisateur est trouvé
             if (resultSet.next() && PasswordHash.checkPassword(hash, resultSet.getString("password"))) {
                 //Recover User Data for the session
                 String queryFromData = "SELECT * FROM `User Information` WHERE `User_ID` = ?";
                 preparedStatement = connection.prepareStatement(queryFromData);
-                System.out.println(resultSet.getString("UserID"));
                 preparedStatement.setString(1, resultSet.getString("UserID"));
 
                 ResultSet userData = preparedStatement.executeQuery();
