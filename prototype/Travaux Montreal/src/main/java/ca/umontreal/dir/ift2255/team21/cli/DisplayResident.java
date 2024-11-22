@@ -49,7 +49,10 @@ public class DisplayResident {
         clearScreen();
         switch (choice){
             case 1:
-                travauxResident(resident,travauxArrayList,entravesArrayList);
+                travauxResident(resident,travauxArrayList,entravesArrayList, 0);
+                break;
+            case 2:
+                entravesResident(resident,travauxArrayList,entravesArrayList, 0);
                 break;
             case 3:
                 soumissionRequete(resident, travauxArrayList, entravesArrayList);
@@ -69,65 +72,133 @@ public class DisplayResident {
 
     }
     public void travauxResident(Resident resident, ArrayList<Travaux> travauxArrayList,
-                                ArrayList<Entraves> entravesArrayList) {
+                                ArrayList<Entraves> entravesArrayList, int index) {
+        Scanner scanner = new Scanner(System.in);
+        int choice=0;
+        String entete = """
+        //========================================================================================================\\\\
+        ||                                     Nouveautés sur les constructions                                   ||
+        ||                                          Dans votre région :                                           ||
+        ||--------------------------------------------------------------------------------------------------------||
+        ||--------------------------------------------------------------------------------------------------------||
+        """;
+        String footer = """
+        ||--------------------------------------------------------------------------------------------------------||
+        ||                                                                                                        ||
+        ||  1) Revenir à l'accueil                                                                                ||
+        ||  2) Revenir à la page précédente                                                                       ||
+        ||  3) Aller à la page suivante                                                                           ||
+        ||                                                                                                        ||
+        \\\\========================================================================================================//
+                                    Votre choix :   """;
+        String body= entete;
+        int i  = index*7;
+        int borne = (index+1)*7;
+        for (; i < borne; i++) {
+            if (i<entravesArrayList.size()) {
+                body += travauxArrayList.get(i);
+                body += "||--------------------------------------------------------------------------------------------------------||\n";
+            }else break;
+        }
+        body+=footer;
+        System.out.print(body);
+        try {
+            choice = scanner.nextInt();
+        }catch (Exception e) {
+            System.err.println("Votre entrée est invalide!");
+            travauxResident(resident, travauxArrayList, entravesArrayList, index);
+        }
+        clearScreen();
+        switch (choice){
+            case 1:
+                homePageResident(resident, travauxArrayList, entravesArrayList);
+                break;
+            case 2:
+                if (i<entravesArrayList.size()){
+                    index++;
+                    travauxResident(resident, travauxArrayList, entravesArrayList, index);
+                }else {
+                    System.err.println("Vous êtes rendu à la fin de la liste.");
+                    travauxResident(resident, travauxArrayList, entravesArrayList, index);
+                }
+                break;
+            case 3:
+                if (index > 0){
+                    index--;
+                    travauxResident(resident, travauxArrayList, entravesArrayList, index);
+                }else {
+                    System.err.println("On ne peut pas retourner plus en arrière.");
+                    travauxResident(resident, travauxArrayList, entravesArrayList, index);
+                }
+                break;
+            default:
+                System.err.println("Votre choix est introuvable");
+                travauxResident(resident, travauxArrayList, entravesArrayList, index);
+                break;
+
+        }
+
+
+        clearScreen();
+    }
+    public void entravesResident(Resident resident, ArrayList<Travaux> travauxArrayList,
+                                ArrayList<Entraves> entravesArrayList, int index) {
         Scanner scanner = new Scanner(System.in);
         int choice;
-        System.out.print("""
-                //================================================================\\\\
-                ||           Travaux en cours/à venir dans votre région           ||
-                ||                      Ville de Montréal                         ||
-                ||----------------------------------------------------------------||
-                ||                                                                ||
-                ||                        TRAVAUX EN COURS:                       ||
-                ||                                                                ||
-                ||  1 - Rue Sainte-Catherine Est :                                ||
-                ||     Objectif : Réparer l'aqueduc au croisement                 ||
-                ||                Sainte-Catherine Est / Berri                    ||
-                ||     Date de début : 10-10-2024                                 ||
-                ||     Date de fin prévue : 23-01-2025                            ||
-                ||                                                                ||
-                ||  2 - Boulevard Saint-Laurent :                                 ||
-                ||     Objectif : Réfection de la chaussée.                       ||
-                ||     Date de début : 01-09-2024                                 ||
-                ||     Date de fin prévue : 20-11-2024                            ||
-                ||                                                                ||
-                ||----------------------------------------------------------------||
-                ||                                                                ||
-                ||                    TRAVAUX À VENIR:                            ||
-                ||                                                                ||
-                ||  1 - Avenue du Parc :                                          ||
-                ||     Objectif : Remplacement des conduites d'eau.               ||
-                ||     Date de début : 05-11-2024                                 ||
-                ||     Date de fin prévue : 15-12-2024                            ||
-                ||                                                                ||
-                ||  2 - Rue Notre-Dame Ouest :                                    ||
-                ||     Objectif : Installation de nouvelles pistes cyclables.     ||
-                ||     Date de début : 20-11-2024                                 ||
-                ||     Date de fin prévue : 15-03-2025                            ||
-                ||                                                                ||
-                ||----------------------------------------------------------------||
-                ||                                                                ||
-                ||   1) Plus de détails sur un projet                             ||
-                ||   2) Rechercher un/des projet(s)                               ||
-                ||   3) Revenir à l'accueil                                       ||
-                ||                                                                ||
-                \\\\================================================================//
-                        Votre choix :   """);
+        String entete = """
+        //========================================================================================================\\\\
+        ||                                     Nouveautés sur les constructions                                   ||
+        ||                                          Dans votre région :                                           ||
+        ||--------------------------------------------------------------------------------------------------------||
+        ||--------------------------------------------------------------------------------------------------------||
+        """;
+        String footer = """
+        ||--------------------------------------------------------------------------------------------------------||
+        ||                                                                                                        ||
+        ||  1) Revenir à l'accueil                                                                                ||
+        ||  2) Revenir à la page précédente                                                                       ||
+        ||  3) Aller à la page suivante                                                                           ||
+        ||                                                                                                        ||
+        \\\\========================================================================================================//
+                                    Votre choix :   """;
+        String body= entete;
+        int i  = index*7;
+        int borne = (index+1)*7;
+        for (; i < borne; i++) {
+            if (i<entravesArrayList.size()) {
+                body += entravesArrayList.get(i);
+                body += "||--------------------------------------------------------------------------------------------------------||\n";
+            }else break;
+        }
+        body+=footer;
+        System.out.print(body);
         choice = scanner.nextInt();
         clearScreen();
         switch (choice){
             case 1:
-                exempleTravaux(resident, travauxArrayList, entravesArrayList);
+                homePageResident(resident, travauxArrayList, entravesArrayList);
                 break;
             case 2:
-                rechercheTravaux(resident, travauxArrayList, entravesArrayList);
+                if (i<entravesArrayList.size()){
+                    index++;
+                    entravesResident(resident, travauxArrayList, entravesArrayList, index);
+                }else {
+                    System.err.println("Vous êtes rendu à la fin de la liste.");
+                    entravesResident(resident, travauxArrayList, entravesArrayList, index);
+                }
                 break;
             case 3:
-                homePageResident(resident, travauxArrayList, entravesArrayList);
+                if (index > 0){
+                    index--;
+                    entravesResident(resident, travauxArrayList, entravesArrayList, index);
+                }else {
+                    System.err.println("On ne peut pas retourner plus en arrière.");
+                    entravesResident(resident, travauxArrayList, entravesArrayList, index);
+                }
                 break;
             default:
                 System.err.println("Votre choix est introuvable");
-                travauxResident(resident, travauxArrayList, entravesArrayList);
+                entravesResident(resident, travauxArrayList, entravesArrayList, index);
                 break;
 
         }
@@ -207,7 +278,7 @@ public class DisplayResident {
         clearScreen();
         switch (choice){
             case 1, 2, 3, 4, 0:
-                travauxResident(resident, travauxArrayList, entravesArrayList);
+                travauxResident(resident, travauxArrayList, entravesArrayList, 0);
                 break;
             default:
                 System.err.println("Erreur de choix !\n");

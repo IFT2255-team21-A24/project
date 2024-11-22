@@ -1,73 +1,72 @@
 package ca.umontreal.dir.ift2255.team21.cli;
 
 import ca.umontreal.dir.ift2255.team21.accounts.Manager;
+import ca.umontreal.dir.ift2255.team21.apihandler.TransformAddress;
+import ca.umontreal.dir.ift2255.team21.distancecalculator.CalculateDistance;
+import ca.umontreal.dir.ift2255.team21.entraves.Entraves;
+import ca.umontreal.dir.ift2255.team21.entraves.Travaux;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
-public class DisplayManager {
-    public void homePageManager(Manager manager) {
-        Scanner input = new Scanner(System.in);
-        int choice;
-        System.out.print("""
-                //======================================================\\\\
-                ||        Informations sur vos chantiers en cours       ||
-                ||                 Région de Montréal :                 ||
-                ||------------------------------------------------------||
-                ||                                                      ||
-                ||                    NOTIFICATIONS:                    ||
-                ||                                                      ||
-                ||    Le projet de construction que vous dirigez :      ||
-                ||                   Accepté                            ||
-                ||              Date de début : 19-10-2024              ||
-                ||                                                      ||
-                ||------------------------------------------------------||
-                ||                                                      ||
-                ||                Projets en cours :                    ||
-                ||                                                      ||
-                ||           1) Pont Jacques-Cartier :                  ||
-                ||  Objectif : Réparation du tablier principal.         ||
-                ||            Date de fin prévue : 15-12-2024           ||
-                ||                                                      ||
-                ||           2) Boulevard René-Lévesque :               ||
-                ||  Objectif : Installation de nouveaux lampadaires     ||
-                ||            Date de fin prévue : 08-11-2024           ||
-                ||                                                      ||
-                ||           3) Rue Sherbrooke Ouest :                  ||
-                ||  Objectif : Réfection de la chaussée                 ||
-                ||            Date de fin prévue : 25-10-2024           ||
-                ||                                                      ||
-                ||------------------------------------------------------||
-                ||  1) Consultation des travaux                         ||
-                ||  2) Soumettre une nouvelle requête                   ||
-                ||  3) Consulter la liste des requêtes                  ||
-                ||  4) Se déconnecter                                   ||
-                ||                                                      ||
-                \\\\======================================================//
-                        Votre choix :   """);
 
+
+public class DisplayManager {
+    public void homePageManager(Manager manager,  ArrayList<Travaux> travauxArrayList,
+                                ArrayList<Entraves> entravesArrayList) {
+        Scanner input = new Scanner(System.in);
+        String entete = """
+        //========================================================================================================\\\\
+        ||                                     Nouveautés sur les constructions                                   ||
+        ||                                          Dans votre région :                                           ||
+        ||--------------------------------------------------------------------------------------------------------||
+        ||--------------------------------------------------------------------------------------------------------||
+        ||                                      Entraves dans votre quartier :                                    ||
+        ||--------------------------------------------------------------------------------------------------------||
+        """;
+        TransformAddress transformAddress = new TransformAddress();
+        String addrCoordinate = transformAddress.transform(manager.getResidential_adress());
+        ArrayList<Entraves> entravesProches = CalculateDistance.listerEntravesProches(entravesArrayList, addrCoordinate);
+        String footer = """
+        ||--------------------------------------------------------------------------------------------------------||
+        ||  1) Consultation des travaux en cours/à venir.                                                         ||
+        ||  2) Consultation des entraves.                                                                         ||
+        ||  3) Soumettre une nouvelle requête                                                                     ||
+        ||  4) Consulter la liste des requêtes                                                                    ||
+        ||  5) Se déconnecter                                                                                     ||
+        ||                                                                                                        ||
+        \\\\========================================================================================================//
+                                    Votre choix :   """;        int choice;
+        String affichage = entete;
+        for (Entraves travaux : entravesProches) {
+            affichage += travaux.toString();
+            affichage += "||--------------------------------------------------------------------------------------------------------||\n";
+        }
+        System.out.print(affichage);
         choice = input.nextInt();
         clearScreen();
 
         switch (choice){
             case 1:
-                travauxManager(manager);
-                break;
-            case 2:
-                soumissionRequete(manager);
+                travauxManager(manager, travauxArrayList, entravesArrayList);
                 break;
             case 3:
-                consulterRequete(manager);
+                soumissionRequete(manager, travauxArrayList, entravesArrayList);
                 break;
             case 4:
+                consulterRequete(manager, travauxArrayList, entravesArrayList);
+                break;
+            case 5:
                 manager = null;
                 break;
             default:
                 System.err.println("Choix indisponible.\n");
-                homePageManager(manager);
+                homePageManager(manager, travauxArrayList, entravesArrayList);
                 break;
         }
     }
-    public void travauxManager(Manager manager) {
+    public void travauxManager(Manager manager,  ArrayList<Travaux> travauxArrayList,
+                               ArrayList<Entraves> entravesArrayList) {
         Scanner input = new Scanner(System.in);
         int choice;
         System.out.print("""
@@ -115,21 +114,22 @@ public class DisplayManager {
 
         switch (choice) {
             case 1:
-                exempleTravail(manager);
+                exempleTravail(manager, travauxArrayList,entravesArrayList);
                 break;
             case 2:
-                homePageManager(manager);
+                homePageManager(manager, travauxArrayList, entravesArrayList);
                 break;
             default:
                 System.err.println("Votre choix est introuvable");
-                travauxManager(manager);
+                travauxManager(manager, travauxArrayList, entravesArrayList);
                 break;
         }
 
         clearScreen();
     }
 
-    public void soumissionRequete(Manager manager) {
+    public void soumissionRequete(Manager manager,  ArrayList<Travaux> travauxArrayList,
+                                  ArrayList<Entraves> entravesArrayList) {
         Scanner input = new Scanner(System.in);
         int choice;
         System.out.print("""
@@ -170,16 +170,17 @@ public class DisplayManager {
         clearScreen();
         switch (choice) {
             case 0,1,2,3,4,5,6,7,8,9:
-                homePageManager(manager);
+                homePageManager(manager, travauxArrayList, entravesArrayList);
                 break;
             default:
                 System.err.println("Votre choix est introuvable");
-                soumissionRequete(manager);
+                soumissionRequete(manager, travauxArrayList, entravesArrayList);
                 break;
         }
     }
 
-    public void consulterRequete(Manager manager) {
+    public void consulterRequete(Manager manager,  ArrayList<Travaux> travauxArrayList,
+                                 ArrayList<Entraves> entravesArrayList) {
         Scanner input = new Scanner(System.in);
         int choice;
         System.out.print("""
@@ -222,16 +223,17 @@ public class DisplayManager {
         clearScreen();
         switch (choice) {
             case 1,2,3:
-                homePageManager(manager);
+                homePageManager(manager, travauxArrayList,entravesArrayList);
                 break;
             default:
                 System.err.println("Votre choix est introuvable");
-                consulterRequete(manager);
+                consulterRequete(manager, travauxArrayList, entravesArrayList);
                 break;
         }
     }
 
-    public void exempleTravail(Manager manager) {
+    public void exempleTravail(Manager manager,  ArrayList<Travaux> travauxArrayList,
+                               ArrayList<Entraves> entravesArrayList) {
         Scanner input = new Scanner(System.in);
         int choice;
         System.out.print("""
@@ -280,11 +282,11 @@ public class DisplayManager {
         clearScreen();
         switch (choice) {
             case 0,1,2,3,4,5,6,7,8,9:
-                homePageManager(manager);
+                homePageManager(manager, travauxArrayList,entravesArrayList);
                 break;
             default:
                 System.err.println("Votre choix est introuvable");
-                exempleTravail(manager);
+                exempleTravail(manager, travauxArrayList,entravesArrayList);
                 break;
         }
     }
