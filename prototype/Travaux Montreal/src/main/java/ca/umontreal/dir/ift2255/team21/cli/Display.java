@@ -81,14 +81,14 @@ public class Display {
             erreurConnection();
         }else{
             clearScreen();
+            ArrayList<Entraves> entravesArrayList = EntravesDB.retrieveAllEntraves();
+            ArrayList<Travaux> travauxArrayList = TravauxDB.retrieveTravaux();
             if (account instanceof Resident) {
-                ArrayList<Entraves> entravesArrayList = EntravesDB.retrieveAllEntraves();
-                ArrayList<Travaux> travauxArrayList = TravauxDB.retrieveTravaux();
                 DisplayResident displayResident = new DisplayResident();
                 displayResident.homePageResident((Resident)account, travauxArrayList, entravesArrayList);
             }else if (account instanceof Manager) {
                 DisplayManager displayManager = new DisplayManager();
-                displayManager.homePageManager((Manager) account);
+                displayManager.homePageManager((Manager) account,  travauxArrayList, entravesArrayList);
 
             }
 
