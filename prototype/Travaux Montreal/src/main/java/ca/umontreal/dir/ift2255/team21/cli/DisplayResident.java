@@ -1,71 +1,60 @@
 package ca.umontreal.dir.ift2255.team21.cli;
 
 import ca.umontreal.dir.ift2255.team21.accounts.Resident;
+import ca.umontreal.dir.ift2255.team21.entraves.Entraves;
+import ca.umontreal.dir.ift2255.team21.entraves.Travaux;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class DisplayResident {
-    public void homePageResident(Resident resident) {
+    public void homePageResident(Resident resident, ArrayList<Travaux> travauxArrayList,
+                                 ArrayList<Entraves> entravesArrayList) {
         Scanner input = new Scanner(System.in);
+        String entete = """
+        //====================================================================================================\\\\
+        ||                                   Nouveautés sur les constructions                                 ||
+        ||                                        Dans votre région :                                         ||
+        ||----------------------------------------------------------------------------------------------------||
+        """;
+
+        String footer = """
+        ||------------------------------------------------------------------------------------------------------||
+        ||  1) Consultation des travaux en cours/à venir.                                                       ||
+        ||  2) Soumission de requête                                                                            ||
+        ||  3) Planification participative                                                                      ||
+        ||  4) Se déconnecter                                                                                   ||
+        ||                                                                                                      ||
+        \\\\======================================================================================================//
+                                    Votre choix :   """;
+
         int choice;
-        System.out.print("""
-                //======================================================\\\\
-                ||           Nouveautés sur les constructions           ||
-                ||                 Dans votre régions :                 ||
-                ||------------------------------------------------------||
-                ||                                                      ||
-                ||                    NOTIFICATIONS:                    ||
-                ||                                                      ||
-                ||    La requête que vous avez dépose est : Acceptée    ||
-                ||              Date de début : 19-10-2024              ||
-                ||                                                      ||
-                ||------------------------------------------------------||
-                ||                                                      ||
-                ||              Rue Sainte-Catherine Est :              ||
-                ||      Objectif : Réparer l'aqueduc au croisement      ||
-                ||                 Sainte-Catherine Est / Berri.        ||
-                ||            Date de fin prévu : 23-01-2025            ||
-                ||                                                      ||
-                ||                    Rue Durocher :                    ||
-                ||       Objectif : Réparation des tuyaux de gaz.       ||
-                ||            Date de fin prévu : 03-11-2024            ||
-                ||                                                      ||
-                ||------------------------------------------------------||
-                ||  1) Consultation des travaux en cours/à venir.       ||
-                ||  2) Soumission de requête                            ||
-                ||  3) Planification participative                      ||
-                ||  4) Signalisation de problème                        ||
-                ||  5) Se déconnecter                                   ||
-                ||                                                      ||
-                \\\\======================================================//
-                        Votre choix :   """);
+        //System.out.print();
         choice = input.nextInt();
         clearScreen();
         switch (choice){
             case 1:
-                travauxResident(resident);
+                travauxResident(resident,travauxArrayList,entravesArrayList);
                 break;
             case 2:
-                soumissionRequete(resident);
+                soumissionRequete(resident, travauxArrayList, entravesArrayList);
                 break;
             case 3:
-                participation(resident);
+                participation(resident, travauxArrayList,entravesArrayList);
                 break;
             case 4:
-                signalisationProbleme(resident);
-                break;
-            case 5:
                 resident = null;
                 break;
             default:
                 System.out.println("Votre choix est introuvable");
-                homePageResident(resident);
+                homePageResident(resident, travauxArrayList, entravesArrayList);
                 break;
         }
 
 
     }
-    public void travauxResident(Resident resident) {
+    public void travauxResident(Resident resident, ArrayList<Travaux> travauxArrayList,
+                                ArrayList<Entraves> entravesArrayList) {
         Scanner scanner = new Scanner(System.in);
         int choice;
         System.out.print("""
@@ -105,8 +94,7 @@ public class DisplayResident {
                 ||                                                                ||
                 ||   1) Plus de détails sur un projet                             ||
                 ||   2) Rechercher un/des projet(s)                               ||
-                ||   3) Signaler une problème                                     ||
-                ||   4) Revenir à l'accueil                                       ||
+                ||   3) Revenir à l'accueil                                       ||
                 ||                                                                ||
                 \\\\================================================================//
                         Votre choix :   """);
@@ -114,20 +102,17 @@ public class DisplayResident {
         clearScreen();
         switch (choice){
             case 1:
-                exempleTravaux(resident);
+                exempleTravaux(resident, travauxArrayList, entravesArrayList);
                 break;
             case 2:
-                rechercheTravaux(resident);
+                rechercheTravaux(resident, travauxArrayList, entravesArrayList);
                 break;
             case 3:
-                signalisationProbleme(resident);
-                break;
-            case 4:
-                homePageResident(resident);
+                homePageResident(resident, travauxArrayList, entravesArrayList);
                 break;
             default:
                 System.err.println("Votre choix est introuvable");
-                travauxResident(resident);
+                travauxResident(resident, travauxArrayList, entravesArrayList);
                 break;
 
         }
@@ -135,7 +120,8 @@ public class DisplayResident {
 
         clearScreen();
     }
-    public void soumissionRequete(Resident resident) {
+    public void soumissionRequete(Resident resident, ArrayList<Travaux> travauxArrayList,
+                                  ArrayList<Entraves> entravesArrayList) {
         Scanner scanner = new Scanner(System.in);
         int choice;
         System.out.print("""
@@ -171,14 +157,15 @@ public class DisplayResident {
         clearScreen();
         switch (choice){
             case 8,9:
-                homePageResident(resident);
+                homePageResident(resident, travauxArrayList, entravesArrayList);
                 break;
             default:
                 System.err.println("Votre choix est introuvable");
-                soumissionRequete(resident);
+                soumissionRequete(resident, travauxArrayList, entravesArrayList);
         }
     }
-    public void rechercheTravaux(Resident resident) {
+    public void rechercheTravaux(Resident resident, ArrayList<Travaux> travauxArrayList,
+                                 ArrayList<Entraves> entravesArrayList) {
         Scanner scanner = new Scanner(System.in);
         int choice;
         System.out.print("""
@@ -205,60 +192,12 @@ public class DisplayResident {
         clearScreen();
         switch (choice){
             case 1, 2, 3, 4, 0:
-                travauxResident(resident);
+                travauxResident(resident, travauxArrayList, entravesArrayList);
                 break;
             default:
                 System.err.println("Erreur de choix !\n");
-                rechercheTravaux(resident);
+                rechercheTravaux(resident, travauxArrayList, entravesArrayList);
         }
-
-    }
-
-    public void signalisationProbleme(Resident resident) {
-        Scanner scanner = new Scanner(System.in);
-        int choice;
-        System.out.print("""
-                //=======================================================\\\\
-                ||               Signalisation de problème               ||
-                ||                   Ville de Montréal                   ||
-                ||-------------------------------------------------------||
-                ||                                                       ||
-                ||   1) Nom du résident : ________________________       ||
-                ||                                                       ||
-                ||   2) Adresse courriel : ____________________________  ||
-                ||                                                       ||
-                ||   3) Adresse de résidence : ________________________  ||
-                ||                            _________________________  ||
-                ||                                                       ||
-                ||   4) Type de problème :                               ||
-                ||      [ ] Trou dans la chaussée                        ||
-                ||      [ ] Fuite d'eau                                  ||
-                ||      [ ] Problème d'éclairage public                  ||
-                ||      [ ] Signalisation défectueuse                    ||
-                ||      [ ] Barricades non conformes                     ||
-                ||      [ ] Autre : ___________________________________  ||
-                ||                                                       ||
-                ||   5) Description du problème : _____________________  ||
-                ||      _______________________________________________  ||
-                ||                                                       ||
-                ||-------------------------------------------------------||
-                ||                                                       ||
-                ||   8) Envoyer le signalement                           ||
-                ||   9) Annuler                                          ||
-                ||                                                       ||
-                \\\\=======================================================//
-                        Votre choix :   """);
-        choice = scanner.nextInt();
-        clearScreen();
-        switch (choice){
-            case 8,9:
-                homePageResident(resident);
-                break;
-            default:
-                System.err.println("Votre choix est introuvable");
-                soumissionRequete(resident);
-        }
-
 
     }
 
@@ -270,7 +209,8 @@ public class DisplayResident {
             }
         }catch (Exception e) {}
     }
-    public void participation(Resident resident) {
+    public void participation(Resident resident, ArrayList<Travaux> travauxArrayList,
+                              ArrayList<Entraves> entravesArrayList) {
         Scanner scanner = new Scanner(System.in);
         int choice;
         System.out.print("""
@@ -295,14 +235,15 @@ public class DisplayResident {
         clearScreen();
         switch (choice){
             case 1,2,3,0:
-                homePageResident(resident);
+                homePageResident(resident, travauxArrayList, entravesArrayList);
                 break;
             default:
                 System.err.println("Votre choix est introuvable");
-                soumissionRequete(resident);
+                soumissionRequete(resident, travauxArrayList, entravesArrayList);
         }
     }
-    public void exempleTravaux(Resident resident) {
+    public void exempleTravaux(Resident resident, ArrayList<Travaux> travauxArrayList,
+                               ArrayList<Entraves> entravesArrayList) {
         Scanner scanner = new Scanner(System.in);
         int choice;
         System.out.println("""
@@ -338,10 +279,10 @@ public class DisplayResident {
         choice = scanner.nextInt();
         clearScreen();
         if (choice == 0){
-            homePageResident(resident);
+            homePageResident(resident, travauxArrayList, entravesArrayList);
         }else{
             System.err.println("Votre choix est introuvable!\n");
-            exempleTravaux(resident);
+            exempleTravaux(resident, travauxArrayList, entravesArrayList);
         }
     }
 
