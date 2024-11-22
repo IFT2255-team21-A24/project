@@ -5,15 +5,15 @@ import java.sql.Date;
 public class Entraves {
     private String steetid;
     private String streetimpact;
-    private String streetname;
+    private String neighborhood;
     private String id_request;
     private double latitude;
     private double longitude;
 
-    public Entraves(String steetid, String streetimpact, String streetname, String id_request, double latitude, double longitude) {
+    public Entraves(String steetid, String streetimpact, String neighborhood, String id_request, double latitude, double longitude) {
         this.steetid = steetid;
         this.streetimpact = streetimpact;
-        this.streetname = streetname;
+        this.neighborhood = neighborhood;
         this.id_request = id_request;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -27,8 +27,8 @@ public class Entraves {
         return streetimpact;
     }
 
-    public String getStreetname() {
-        return streetname;
+    public String getneighborhood() {
+        return neighborhood;
     }
 
     public String getId_request() {

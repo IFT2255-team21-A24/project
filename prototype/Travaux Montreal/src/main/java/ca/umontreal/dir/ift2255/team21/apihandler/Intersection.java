@@ -11,7 +11,7 @@ import java.io.IOException;
 import ca.umontreal.dir.ift2255.team21.databasehandler.DataForConnection;
 
 public class Intersection {
-    public static String calculerIntersection(String[] ruesDebut, String[] ruesFin ) {
+    public static double[] calculerIntersection(String[] ruesDebut, String[] ruesFin ) {
         OkHttpClient client = new OkHttpClient();
         String adresse = "Intersection of " + String.join(" and ", ruesDebut) + ", Montreal, QC";
         String url = "https://maps.googleapis.com/maps/api/geocode/json?address=" +
@@ -27,7 +27,7 @@ public class Intersection {
         double lon_milieu = (debut[1]+fin[1])/2;
         double lat_milieu = (debut[0]+fin[0])/2;
 
-        return lat_milieu + "," + lon_milieu;
+        return new double[]{lat_milieu, lon_milieu};
     }
     private static double[] coordinateReseaerch(Request request){
 

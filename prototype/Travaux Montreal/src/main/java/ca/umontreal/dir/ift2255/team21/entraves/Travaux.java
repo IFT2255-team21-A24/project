@@ -11,12 +11,12 @@ public class Travaux {
     private String boroughid;
     private String currentstatus;
     private String reason_category;
-    private String submitcategory;
+    private String submittercategory;
     private String organisationname;
 
     public Travaux(String id, double longitude, double latitude, Date dateDebut, Date dateFin,
                    String boroughid, String currentstatus, String reason_category,
-                   String submitcategory, String organisationname) {
+                   String submittercategory, String organisationname) {
         this.id = id;
         this.longitude = longitude;
         this.latitude = latitude;
@@ -25,7 +25,7 @@ public class Travaux {
         this.boroughid = boroughid;
         this.currentstatus = currentstatus;
         this.reason_category = reason_category;
-        this.submitcategory = submitcategory;
+        this.submittercategory = submittercategory;
         this.organisationname = organisationname;
     }
 
@@ -61,8 +61,8 @@ public class Travaux {
         return reason_category;
     }
 
-    public String getSubmitcategory() {
-        return submitcategory;
+    public String getSubmittercategory() {
+        return submittercategory;
     }
 
     public String getOrganisationname() {
