@@ -1,7 +1,9 @@
 package ca.umontreal.dir.ift2255.team21.distancecalculator;
 import ca.umontreal.dir.ift2255.team21.apihandler.ListerEntraves;
 import ca.umontreal.dir.ift2255.team21.databasehandler.DataForConnection;
+import ca.umontreal.dir.ift2255.team21.databasehandler.InsertData;
 import ca.umontreal.dir.ift2255.team21.entraves.Entraves;
+import ca.umontreal.dir.ift2255.team21.entraves.Travaux;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -18,9 +20,7 @@ public class CalculateDistance {
         ArrayList<Entraves> entravesProches = new ArrayList<>();
         String quartierClient = trouverQuartier(coordinates);
         for (Entraves entrave : entraves) {
-            String coordinatesEntrave = entrave.getLatitude() + "," + entrave.getLongitude();
-            String quartierTravaux = trouverQuartier(coordinatesEntrave);
-            if (quartierTravaux.equals(quartierClient)) {
+            if (entrave.getneighborhood().equals(quartierClient)) {
                 entravesProches.add(entrave);
             }
         }
@@ -28,7 +28,7 @@ public class CalculateDistance {
         return entravesProches;
     }
 
-    private static String trouverQuartier(String coord) {
+    public static String trouverQuartier(String coord) {
         OkHttpClient client = new OkHttpClient();
         String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coord + "&key=" +
                 DataForConnection.GOOGLEKEY.getUrl();
@@ -55,15 +55,5 @@ public class CalculateDistance {
         }
         return null;
     }
-
-    public static void main(String[] args) {
-        ArrayList<Entraves> listerEntraves = new ArrayList<>();
-        listerEntraves = ListerEntraves.appelAPI();
-        System.out.println(listerEntraves);
-        String test = "45.52049513444428,-73.74041890999476";
-        listerEntraves = listerEntravesProches(listerEntraves, test);
-        System.out.println(listerEntraves);
-    }
-
 
 }
