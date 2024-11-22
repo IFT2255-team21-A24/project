@@ -30,4 +30,32 @@ public class Account {
                 ", date_naissance=" + date_naissance +
                 '}';
     }
+
+    public String getFirst_name() {
+        return first_name;
+    }
+
+    public String getLast_name() {
+        return last_name;
+    }
+
+    public String getResidential_adress() {
+        return residential_adress;
+    }
+
+    public String getElectronic_adress() {
+        return electronic_adress;
+    }
+
+    public String getPhone_number() {
+        return phone_number;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public Date getDate_naissance() {
+        return date_naissance;
+    }
 }

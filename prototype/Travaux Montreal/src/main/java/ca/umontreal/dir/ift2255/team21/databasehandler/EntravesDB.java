@@ -27,7 +27,7 @@ public class EntravesDB {
             rs = stmt.executeQuery();
 
             while (rs.next()) {
-                String id = rs.getString("idTravaux");
+                String id = rs.getString("idEntraves");
                 String streetname = rs.getString("streetname");
                 String neighberhood = rs.getString("neighberhood");
                 String streetImpactType = rs.getString("streetImpactType");

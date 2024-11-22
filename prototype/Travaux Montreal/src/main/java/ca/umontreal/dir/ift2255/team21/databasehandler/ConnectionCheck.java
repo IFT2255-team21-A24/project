@@ -26,7 +26,7 @@ public class ConnectionCheck {
             connection = DriverManager.getConnection(jdbcUrl, username, password);
 
             // Requête SQL avec une clause WHERE pour rechercher par username
-            String query = "SELECT UserID, password, username FROM `Loggin Credentials` WHERE username = ?";
+            String query = "SELECT UserID, password, email FROM `Loggin Credentials` WHERE email = ?";
 
             // Préparer la requête SQL avec le PreparedStatement
             preparedStatement = connection.prepareStatement(query);
@@ -40,7 +40,7 @@ public class ConnectionCheck {
             // Vérifier si un utilisateur est trouvé
             if (resultSet.next() && PasswordHash.checkPassword(hash, resultSet.getString("password"))) {
                 //Recover User Data for the session
-                String queryFromData = "SELECT * FROM `User Information` WHERE `Loggin Credentials_UserID` = ?";
+                String queryFromData = "SELECT * FROM `User Information` WHERE `User_ID` = ?";
                 preparedStatement = connection.prepareStatement(queryFromData);
                 System.out.println(resultSet.getString("UserID"));
                 preparedStatement.setString(1, resultSet.getString("UserID"));
@@ -50,12 +50,12 @@ public class ConnectionCheck {
                 if (userData.getInt("CityNumber") == -1) {
                     user = new Resident (userData.getString("FirstName"), userData.getString("LastName"),
                             userData.getString("ResidentialAddress"), userData.getString("ElectronicAddress"),
-                            userData.getString("PhoneNumber"), userData.getInt("Loggin Credentials_UserID"),
+                            userData.getString("PhoneNumber"), userData.getInt("User_ID"),
                             userData.getDate("BirthDate"));
                 }else {
                     user = new Manager(userData.getString("FirstName"), userData.getString("LastName"),
                             userData.getString("ResidentialAddress"), userData.getString("ElectronicAddress"),
-                            userData.getString("PhoneNumber"), userData.getInt("Loggin Credentials_UserID"),
+                            userData.getString("PhoneNumber"), userData.getInt("User_ID"),
                             userData.getDate("BirthDate"), userData.getInt("CityNumber"));
                 }
             }

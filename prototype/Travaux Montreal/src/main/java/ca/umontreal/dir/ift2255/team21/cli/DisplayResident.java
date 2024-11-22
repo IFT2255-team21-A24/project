@@ -1,6 +1,8 @@
 package ca.umontreal.dir.ift2255.team21.cli;
 
 import ca.umontreal.dir.ift2255.team21.accounts.Resident;
+import ca.umontreal.dir.ift2255.team21.apihandler.TransformAddress;
+import ca.umontreal.dir.ift2255.team21.distancecalculator.CalculateDistance;
 import ca.umontreal.dir.ift2255.team21.entraves.Entraves;
 import ca.umontreal.dir.ift2255.team21.entraves.Travaux;
 
@@ -12,37 +14,50 @@ public class DisplayResident {
                                  ArrayList<Entraves> entravesArrayList) {
         Scanner input = new Scanner(System.in);
         String entete = """
-        //====================================================================================================\\\\
-        ||                                   Nouveautés sur les constructions                                 ||
-        ||                                        Dans votre région :                                         ||
-        ||----------------------------------------------------------------------------------------------------||
+        //========================================================================================================\\\\
+        ||                                     Nouveautés sur les constructions                                   ||
+        ||                                          Dans votre région :                                           ||
+        ||--------------------------------------------------------------------------------------------------------||
+        ||--------------------------------------------------------------------------------------------------------||
+        ||                                      Entraves dans votre quartier :                                    ||
+        ||--------------------------------------------------------------------------------------------------------||
         """;
+        TransformAddress transformAddress = new TransformAddress();
+        String addrCoordinate = transformAddress.transform(resident.getResidential_adress());
+        ArrayList<Entraves> entravesProches = CalculateDistance.listerEntravesProches(entravesArrayList, addrCoordinate);
 
         String footer = """
-        ||------------------------------------------------------------------------------------------------------||
-        ||  1) Consultation des travaux en cours/à venir.                                                       ||
-        ||  2) Soumission de requête                                                                            ||
-        ||  3) Planification participative                                                                      ||
-        ||  4) Se déconnecter                                                                                   ||
-        ||                                                                                                      ||
-        \\\\======================================================================================================//
+        ||--------------------------------------------------------------------------------------------------------||
+        ||  1) Consultation des travaux en cours/à venir.                                                         ||
+        ||  2) Consultation des entraves.                                                                         ||
+        ||  3) Soumission de requête                                                                              ||
+        ||  4) Planification participative                                                                        ||
+        ||  5) Se déconnecter                                                                                     ||
+        ||                                                                                                        ||
+        \\\\========================================================================================================//
                                     Votre choix :   """;
 
         int choice;
-        //System.out.print();
+        String affichage = entete;
+        for (Entraves travaux : entravesProches) {
+            affichage += travaux.toString();
+            affichage += "||--------------------------------------------------------------------------------------------------------||\n";
+        }
+        affichage += footer;
+        System.out.print(affichage);
         choice = input.nextInt();
         clearScreen();
         switch (choice){
             case 1:
                 travauxResident(resident,travauxArrayList,entravesArrayList);
                 break;
-            case 2:
+            case 3:
                 soumissionRequete(resident, travauxArrayList, entravesArrayList);
                 break;
-            case 3:
+            case 4:
                 participation(resident, travauxArrayList,entravesArrayList);
                 break;
-            case 4:
+            case 5:
                 resident = null;
                 break;
             default:

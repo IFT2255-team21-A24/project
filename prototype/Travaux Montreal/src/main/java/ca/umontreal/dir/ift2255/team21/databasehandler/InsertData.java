@@ -5,6 +5,7 @@ import ca.umontreal.dir.ift2255.team21.entraves.Travaux;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class InsertData {
 
@@ -12,7 +13,7 @@ public class InsertData {
     private static String admin = DataForConnection.USER.getUrl();
     private static String access = DataForConnection.KEY.getUrl();
     public static void insertionUtilisateur(String first_name, String last_name, String residential_adress, String electronic_adress,
-                           String phone_number, LocalDate date_naissance, String passwordHash, String usernameDB,
+                           String phone_number, LocalDate date_naissance, String passwordHash,
                            int cityNumber) {
 
         Connection conn = null;
@@ -28,7 +29,7 @@ public class InsertData {
 
             String sqlInsert = "INSERT INTO `Loggin Credentials` (password, email) VALUES (?,?)";
             ps = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(2, usernameDB);
+            ps.setString(2, electronic_adress);
             ps.setString(1, passwordHash);
             ps.executeUpdate();
 
@@ -36,7 +37,7 @@ public class InsertData {
 
             if (rs.next()) {
                 int userID = rs.getInt(1);
-                sqlInsert = "INSERT INTO `User Information` (`UserID`, " +
+                sqlInsert = "INSERT INTO `User Information` (`User_ID`, " +
                         "FirstName, LastName, ResidentialAddress, ElectronicAddress," +
                         "PhoneNumber, BirthDate, CityNumber) VALUES (?,?,?,?,?,?,?,?)";
                 ps = conn.prepareStatement(sqlInsert);
@@ -49,11 +50,6 @@ public class InsertData {
                 ps.setDate(7, java.sql.Date.valueOf(date_naissance));
                 ps.setInt(8, cityNumber);
                 ps.executeUpdate();
-            }
-
-            // Si la connexion est réussie
-            if (conn != null) {
-                System.out.println("Connexion à la base de données MySQL réussie !");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -118,4 +114,82 @@ public class InsertData {
         }
 
     }
+
+    // PERMET DE GÉNÉRER DES INFOS
+    /**
+    public static void main(String[] args) {
+        // Génération d'un jeu de données
+        for (int i = 0; i < 10; i++) {
+            String firstName = generateFirstName();
+            String lastName = generateLastName();
+            String residentialAddress = generateResidentialAddressMontreal();
+            String electronicAddress = generateEmail(firstName, lastName);
+            String phoneNumber = generatePhoneNumber();
+            LocalDate dateNaissance = generateDateNaissance();
+            String password = generatePassword();
+            int cityNumber = generateCityNumber();
+            if (i%2==0){
+                cityNumber = -1;
+            }
+            String passwordHash = PasswordHash.hashPassword(password);
+            insertionUtilisateur(firstName, lastName, residentialAddress, electronicAddress, phoneNumber, dateNaissance,
+                    passwordHash, cityNumber);
+            System.out.println(password);
+        }
+    }
+
+    private static String generateFirstName() {
+        String[] firstNames = {"Alice", "Bob", "Charlie", "Diana", "Eve", "Frank", "Gabriel", "Hélène"};
+        return firstNames[new Random().nextInt(firstNames.length)];
+    }
+
+    private static String generateLastName() {
+        String[] lastNames = {"Smith", "Johnson", "Williams", "Brown", "Jones", "Miller", "Tremblay", "Lefebvre"};
+        return lastNames[new Random().nextInt(lastNames.length)];
+    }
+
+    private static String generateResidentialAddressMontreal() {
+        String[] streets = {
+                "Rue Sainte-Catherine", "Avenue du Mont-Royal", "Boulevard Saint-Laurent",
+                "Rue Sherbrooke", "Rue Saint-Denis", "Rue Jarry", "Rue Jean-Talon", "Rue Ontario"
+        };
+        int houseNumber = new Random().nextInt(999) + 1;
+        String borough = new Random().nextBoolean() ? "Montréal" : "Montréal-Nord";
+        return houseNumber + " " + streets[new Random().nextInt(streets.length)] + ", " + borough + ", QC";
+    }
+
+    private static String generateEmail(String firstName, String lastName) {
+        String[] domains = {"example.com", "mail.com", "email.ca", "test.org"};
+        return firstName.toLowerCase() + "." + lastName.toLowerCase() + "@" + domains[new Random().nextInt(domains.length)];
+    }
+
+    private static String generatePhoneNumber() {
+        Random rand = new Random();
+        return String.format("(514) %03d-%04d", rand.nextInt(1000), rand.nextInt(10000));
+    }
+
+
+    private static LocalDate generateDateNaissance() {
+        Random rand = new Random();
+        int year = rand.nextInt(30) + 1970; // Entre 1970 et 1999
+        int month = rand.nextInt(12) + 1;
+        int day = rand.nextInt(28) + 1; // Simplification : max 28 jours
+        return LocalDate.of(year, month, day);
+    }
+
+    private static String generatePassword() {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder password = new StringBuilder();
+        Random rand = new Random();
+        for (int i = 0; i < 10; i++) { // Longueur de mot de passe : 10 caractères
+            password.append(chars.charAt(rand.nextInt(chars.length())));
+        }
+        return password.toString();
+    }
+
+    private static int generateCityNumber() {
+        return new Random().nextInt(1000) + 1; // Numéro de ville entre 1 et 1000
+    }
+**/
+
 }
