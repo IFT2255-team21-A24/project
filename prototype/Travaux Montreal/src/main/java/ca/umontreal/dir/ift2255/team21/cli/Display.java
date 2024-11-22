@@ -3,6 +3,10 @@ import ca.umontreal.dir.ift2255.team21.accounts.Account;
 import ca.umontreal.dir.ift2255.team21.accounts.Manager;
 import ca.umontreal.dir.ift2255.team21.accounts.Resident;
 import ca.umontreal.dir.ift2255.team21.databasehandler.ConnectionCheck;
+import ca.umontreal.dir.ift2255.team21.databasehandler.EntravesDB;
+import ca.umontreal.dir.ift2255.team21.databasehandler.TravauxDB;
+import ca.umontreal.dir.ift2255.team21.entraves.Entraves;
+import ca.umontreal.dir.ift2255.team21.entraves.Travaux;
 
 import java.util.*;
 import java.lang.*;
@@ -78,8 +82,10 @@ public class Display {
         }else{
             clearScreen();
             if (account instanceof Resident) {
+                ArrayList<Entraves> entravesArrayList = EntravesDB.retrieveAllEntraves();
+                ArrayList<Travaux> travauxArrayList = TravauxDB.retrieveTravaux();
                 DisplayResident displayResident = new DisplayResident();
-                displayResident.homePageResident((Resident)account);
+                displayResident.homePageResident((Resident)account, travauxArrayList, entravesArrayList);
             }else if (account instanceof Manager) {
                 DisplayManager displayManager = new DisplayManager();
                 displayManager.homePageManager((Manager) account);

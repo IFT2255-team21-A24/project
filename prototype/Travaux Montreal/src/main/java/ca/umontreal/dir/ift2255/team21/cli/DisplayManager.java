@@ -140,22 +140,12 @@ public class DisplayManager {
                 ||                                                             ||
                 ||   1) Nom du projet : _________________________________      ||
                 ||                                                             ||
-                ||   2) Localisation du projet : ________________________      ||
-                ||                                                             ||
                 ||   3) Type de projet :                                       ||
                 ||      [ ] Réparation de routes                               ||
                 ||      [ ] Réseau d'aqueduc                                   ||
                 ||      [ ] Conduites de gaz                                   ||
                 ||      [ ] Installation de lampadaires                        ||
                 ||      [ ] Autre : ___________________________________        ||
-                ||                                                             ||
-                ||   4) Quartiers affectés :                                   ||
-                ||      [ ] Centre-Ville                                       ||
-                ||      [ ] Plateau-Mont-Royal                                 ||
-                ||      [ ] Rosemont                                           ||
-                ||      [ ] Outremont                                          ||
-                ||      [ ] Hochelaga-Maisonneuve                              ||
-                ||      [ ] Autre : __________________________________         ||
                 ||                                                             ||
                 ||   5) Rues affectées : _________________________________     ||
                 ||                       ___________________________________   ||
