@@ -45,7 +45,6 @@ public class CalculateDistance {
                     if (addresses.length() > 2) {
                         JSONObject quartier = addresses.getJSONObject(2);
                         String quartierTravaux = quartier.getString("long_name");
-                        System.out.println(quartierTravaux);
                         return quartierTravaux;
                     }
                 }
