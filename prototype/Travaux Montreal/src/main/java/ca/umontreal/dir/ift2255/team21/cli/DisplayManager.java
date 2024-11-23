@@ -3,9 +3,11 @@ package ca.umontreal.dir.ift2255.team21.cli;
 import ca.umontreal.dir.ift2255.team21.accounts.Manager;
 import ca.umontreal.dir.ift2255.team21.accounts.Resident;
 import ca.umontreal.dir.ift2255.team21.apihandler.TransformAddress;
+import ca.umontreal.dir.ift2255.team21.databasehandler.RequestsDB;
 import ca.umontreal.dir.ift2255.team21.distancecalculator.CalculateDistance;
 import ca.umontreal.dir.ift2255.team21.entraves.Entraves;
 import ca.umontreal.dir.ift2255.team21.entraves.Travaux;
+import ca.umontreal.dir.ift2255.team21.requests.Requests;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -56,7 +58,7 @@ public class DisplayManager {
                 soumissionRequete(manager, travauxArrayList, entravesArrayList);
                 break;
             case 4:
-                consulterRequete(manager, travauxArrayList, entravesArrayList);
+                consulterRequete(manager, travauxArrayList, entravesArrayList,0);
                 break;
             case 5:
                 manager = null;
@@ -208,7 +210,7 @@ public class DisplayManager {
     public void soumissionRequete(Manager manager,  ArrayList<Travaux> travauxArrayList,
                                   ArrayList<Entraves> entravesArrayList) {
         Scanner input = new Scanner(System.in);
-        int choice;
+        int choice=0;
         System.out.print("""
                 //=============================================================\\\\
                 ||           Soumission de requête pour un projet              ||
@@ -242,7 +244,12 @@ public class DisplayManager {
                 \\\\===========================================================//
                         Votre choix :   """);
 
-        choice = input.nextInt();
+        try {
+            choice = input.nextInt();
+        }catch (Exception e) {
+            System.err.println("Votre entrée est invalide!");
+            soumissionRequete(manager, travauxArrayList, entravesArrayList);
+        }
 
         clearScreen();
         switch (choice) {
@@ -257,54 +264,70 @@ public class DisplayManager {
     }
 
     public void consulterRequete(Manager manager,  ArrayList<Travaux> travauxArrayList,
-                                 ArrayList<Entraves> entravesArrayList) {
+                                 ArrayList<Entraves> entravesArrayList, int index) {
         Scanner input = new Scanner(System.in);
-        int choice;
-        System.out.print("""
-                //=================================================================\\\\
-                ||             Liste des requêtes des travaux soumises             ||
-                ||                        Ville de Montréal                        ||
-                ||-----------------------------------------------------------------||
-                ||                                                                 ||
-                ||   1- Rue Sherbrooke Ouest - Réparation de l'éclairage public    ||
-                ||      Soumis par : Marc Dupuis                                   ||
-                ||      Date de soumission : 12/09/2024                            ||
-                ||      Statut : En attente                                        ||
-                ||                                                                 ||
-                ||   2- Boulevard René-Lévesque - Réfection de la chaussée         ||
-                ||      Soumis par : Julie Martin                                  ||
-                ||      Date de soumission : 23/08/2024                            ||
-                ||      Statut : En cours                                          ||
-                ||                                                                 ||
-                ||   3- Rue Sainte-Catherine - Reconfiguration des pistes cyclables||
-                ||      Soumis par : Luc Tremblay                                  ||
-                ||      Date de soumission : 30/09/2024                            ||
-                ||      Statut : Approuvé                                          ||
-                ||                                                                 ||
-                ||   4- Avenue du Parc - Remplacement des conduites d'eau          ||
-                ||      Soumis par : Sophie Roy                                    ||
-                ||      Date de soumission : 18/09/2024                            ||
-                ||      Statut : Refusé                                            ||
-                ||                                                                 ||
-                ||-----------------------------------------------------------------||
-                ||                                                                 ||
-                ||   1) Voir plus de détails sur une requête                       ||
-                ||   2) Soumettre la candidature pour une requête                  ||
-                ||   3) Retourner au menu principal                                ||
-                ||                                                                 ||
-                \\\\=================================================================//
-                        Votre choix :   """);
+        ArrayList<Requests> requestsArrayList = RequestsDB.retrieveRequests();
+        int choice=0;
+        String entete = """
+        //========================================================================================================\\\\
+        ||                               Liste des requêtes soumis par les clients :                              ||
+        ||--------------------------------------------------------------------------------------------------------||
+        ||--------------------------------------------------------------------------------------------------------||
+        """;
+        String footer = """
+        ||--------------------------------------------------------------------------------------------------------||
+        ||                                                                                                        ||
+        ||  1) Revenir à la page précédente                                                                       ||
+        ||  2) Aller à la page suivante                                                                           ||
+        ||  3) Revenir à l'accueil                                                                                ||
+        ||                                                                                                        ||
+        \\\\========================================================================================================//
+                        Votre choix :   """;
 
-        choice = input.nextInt();
 
+        String body=entete;
+        int i  = index*7;
+        int borne = (index+1)*7;
+        for (; i < borne; i++) {
+            if (i<requestsArrayList.size()) {
+                body += requestsArrayList.get(i);
+                body += "||-------------------------------------------------------------------------------------------------------||\n";
+            }else break;
+        }
+        body += footer;
+        System.out.print(body);
+        try {
+            choice = input.nextInt();
+        }catch (Exception e) {
+            System.err.println("Votre entrée est invalide!");
+            soumissionRequete(manager, travauxArrayList, entravesArrayList);
+        }
         clearScreen();
         switch (choice) {
-            case 1,2,3:
-                homePageManager(manager, travauxArrayList,entravesArrayList);
+            case 1:
+                if (index > 0){
+                    index--;
+                    travauxManager(manager, travauxArrayList, entravesArrayList, index);
+                }else {
+                    System.err.println("Vous êtes rendu à la fin de la liste.");
+                    travauxManager(manager, travauxArrayList, entravesArrayList, index);
+                }
+                break;
+            case 2:
+                if (i<entravesArrayList.size()){
+                    index++;
+                    travauxManager(manager, travauxArrayList, entravesArrayList, index);
+                }else {
+                    System.err.println("On ne peut pas retourner plus en arrière.");
+                    travauxManager(manager, travauxArrayList, entravesArrayList, index);
+                }
+                break;
+            case 3:
+                homePageManager(manager, travauxArrayList, entravesArrayList);
                 break;
             default:
                 System.err.println("Votre choix est introuvable");
-                consulterRequete(manager, travauxArrayList, entravesArrayList);
+                travauxManager(manager, travauxArrayList, entravesArrayList, index);
                 break;
         }
     }

@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class RequestsDB {
-    private static ArrayList<Requests> retrieveRequests() {
+    public static ArrayList<Requests> retrieveRequests() {
         ArrayList<Requests> requests = new ArrayList<>();
 
         String jdbcUrl = DataForConnection.ENDPOINT.getUrl();
