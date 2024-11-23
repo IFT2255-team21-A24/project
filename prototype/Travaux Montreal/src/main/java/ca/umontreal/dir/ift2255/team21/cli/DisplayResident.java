@@ -321,7 +321,7 @@ public class DisplayResident {
                     System.err.println("Le tableau n'est pas rempli, voici vos données:\n" + name + "\n"+ date + "\n"
                             + type + "\n"+ address + "\n");
                 }else {
-                        Requests requests = new Requests(name, type, address, latitude, longitude, date1);
+                        Requests requests = new Requests(name, type, address, latitude, longitude, date1, "Prévu");
                         InsertData.insertRequest(requests);
                         homePageResident(resident, travauxArrayList,entravesArrayList);
                     }

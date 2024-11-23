@@ -123,7 +123,7 @@ public class InsertData {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(jdbcUrl, admin, access);
             String sqlInsert = "INSERT INTO `WorkRequests` (`WorkTitle`, `WorkType`, `Address`,`StartDate`," +
-                    "`longitude`, `latitude`) VALUES (?,?,?,?,?,?)";
+                    "`longitude`, `latitude`, `Status`) VALUES (?,?,?,?,?,?,?)";
             ps = conn.prepareStatement(sqlInsert);
             ps.setString(1,request.getName());
             ps.setString(2, request.getType());
@@ -131,6 +131,7 @@ public class InsertData {
             ps.setDate(4, request.getBeginDate());
             ps.setDouble(5, request.getLongitude());
             ps.setDouble(6, request.getLatitude());
+            ps.setString(7, request.getStatus());
             ps.executeUpdate();
 
         } catch (ClassNotFoundException e) {
