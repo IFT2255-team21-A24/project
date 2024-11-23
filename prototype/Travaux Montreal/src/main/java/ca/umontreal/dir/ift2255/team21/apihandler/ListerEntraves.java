@@ -1,5 +1,6 @@
 package ca.umontreal.dir.ift2255.team21.apihandler;
 
+import ca.umontreal.dir.ift2255.team21.databasehandler.InsertData;
 import ca.umontreal.dir.ift2255.team21.distancecalculator.CalculateDistance;
 import ca.umontreal.dir.ift2255.team21.entraves.Entraves;
 import ca.umontreal.dir.ift2255.team21.entraves.Travaux;
@@ -54,7 +55,6 @@ public class ListerEntraves {
                     double longitude = coordinates[1];
                     String neighborhood = CalculateDistance.trouverQuartier(latitude + "," + longitude);
                     Entraves entraves1 = new Entraves(streetid, streetimpact, neighborhood, id, latitude, longitude);
-                    System.out.println(entraves1);
                     entraves.add(entraves1);
                 }
             }
@@ -114,6 +114,5 @@ public class ListerEntraves {
         }
         return travaux;
     }
-
 
 }

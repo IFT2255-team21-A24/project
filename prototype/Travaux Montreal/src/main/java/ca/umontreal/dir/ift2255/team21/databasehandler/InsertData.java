@@ -1,6 +1,7 @@
 package ca.umontreal.dir.ift2255.team21.databasehandler;
 import ca.umontreal.dir.ift2255.team21.entraves.Entraves;
 import ca.umontreal.dir.ift2255.team21.entraves.Travaux;
+import ca.umontreal.dir.ift2255.team21.requests.Requests;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -112,6 +113,32 @@ public class InsertData {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+    }
+
+    public static void insertRequest(Requests request) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(jdbcUrl, admin, access);
+            String sqlInsert = "INSERT INTO `WorkRequests` (`WorkTitle`, `WorkType`, `Address`,`StartDate`," +
+                    "`longitude`, `latitude`) VALUES (?,?,?,?,?,?)";
+            ps = conn.prepareStatement(sqlInsert);
+            ps.setString(1,request.getName());
+            ps.setString(2, request.getType());
+            ps.setString(3, request.getAddress());
+            ps.setDate(4, request.getBeginDate());
+            ps.setDouble(5, request.getLongitude());
+            ps.setDouble(6, request.getLatitude());
+            ps.executeUpdate();
+
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
 
     }
 

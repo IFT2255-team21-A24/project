@@ -73,7 +73,7 @@ public class Travaux {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("||  ").append(boroughid).append(" :").append("\n");
+        sb.append(formatLine(boroughid + " :"));
         sb.append(formatLine("Statut actuel : " + currentstatus));
         sb.append(formatLine("Catégorie de raison : " + reason_category));
         sb.append(formatLine("Catégorie du soumettant : " + submittercategory));
