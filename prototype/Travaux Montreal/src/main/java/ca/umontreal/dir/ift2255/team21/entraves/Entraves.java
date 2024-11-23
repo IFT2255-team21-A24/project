@@ -50,9 +50,10 @@ public class Entraves {
         StringBuilder sb = new StringBuilder();
         int maxWidth = 100; // Largeur maximale pour les colonnes
 
-        sb.append(formatLine(String.format("Construction en cours sur %s:", steetid), maxWidth, true));
-        sb.append(formatLine("Objectif : " + streetimpact, maxWidth, false));
+        sb.append(formatLine(String.format("Entrave en cours sur %s:", steetid), maxWidth, true));
+        sb.append(formatLine("Impact : " + streetimpact, maxWidth, false));
         sb.append(formatLine("Quartier : " + neighborhood, maxWidth, false));
+        sb.append(formatLine("ID : " + id_request, maxWidth, false));
         sb.append(formatLine(neighborhood, maxWidth, true));
 
         return sb.toString();

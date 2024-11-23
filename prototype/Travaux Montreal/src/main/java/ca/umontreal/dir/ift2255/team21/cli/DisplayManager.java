@@ -1,6 +1,7 @@
 package ca.umontreal.dir.ift2255.team21.cli;
 
 import ca.umontreal.dir.ift2255.team21.accounts.Manager;
+import ca.umontreal.dir.ift2255.team21.accounts.Resident;
 import ca.umontreal.dir.ift2255.team21.apihandler.TransformAddress;
 import ca.umontreal.dir.ift2255.team21.distancecalculator.CalculateDistance;
 import ca.umontreal.dir.ift2255.team21.entraves.Entraves;
@@ -42,13 +43,14 @@ public class DisplayManager {
             affichage += travaux.toString();
             affichage += "||--------------------------------------------------------------------------------------------------------||\n";
         }
+        affichage += footer;
         System.out.print(affichage);
         choice = input.nextInt();
         clearScreen();
 
         switch (choice){
             case 1:
-                travauxManager(manager, travauxArrayList, entravesArrayList);
+                travauxManager(manager, travauxArrayList, entravesArrayList,0);
                 break;
             case 3:
                 soumissionRequete(manager, travauxArrayList, entravesArrayList);
@@ -65,63 +67,138 @@ public class DisplayManager {
                 break;
         }
     }
-    public void travauxManager(Manager manager,  ArrayList<Travaux> travauxArrayList,
-                               ArrayList<Entraves> entravesArrayList) {
-        Scanner input = new Scanner(System.in);
+    public void entravesManager(Manager manager, ArrayList<Travaux> travauxArrayList,
+                                 ArrayList<Entraves> entravesArrayList, int index) {
+        Scanner scanner = new Scanner(System.in);
         int choice;
-        System.out.print("""
-                //================================================================\\\\
-                ||           Travaux en cours/à venir dans votre région           ||
-                ||                      Ville de Montréal                         ||
-                ||----------------------------------------------------------------||
-                ||                                                                ||
-                ||                        TRAVAUX EN COURS:                       ||
-                ||                                                                ||
-                ||  1 - Rue Sainte-Catherine Est :                                ||
-                ||     Objectif : Réparer l'aqueduc au croisement                 ||
-                ||                Sainte-Catherine Est / Berri                    ||
-                ||     Date de début : 10-10-2024                                 ||
-                ||     Date de fin prévue : 23-01-2025                            ||
-                ||                                                                ||
-                ||  2 - Boulevard Saint-Laurent :                                 ||
-                ||     Objectif : Réfection de la chaussée.                       ||
-                ||     Date de début : 01-09-2024                                 ||
-                ||     Date de fin prévue : 20-11-2024                            ||
-                ||                                                                ||
-                ||----------------------------------------------------------------||
-                ||                                                                ||
-                ||                    TRAVAUX À VENIR:                            ||
-                ||                                                                ||
-                ||  1 - Avenue du Parc :                                          ||
-                ||     Objectif : Remplacement des conduites d'eau.               ||
-                ||     Date de début : 05-11-2024                                 ||
-                ||     Date de fin prévue : 15-12-2024                            ||
-                ||                                                                ||
-                ||  2 - Rue Notre-Dame Ouest :                                    ||
-                ||     Objectif : Installation de nouvelles pistes cyclables.     ||
-                ||     Date de début : 20-11-2024                                 ||
-                ||     Date de fin prévue : 15-03-2025                            ||
-                ||                                                                ||
-                ||----------------------------------------------------------------||
-                ||                                                                ||
-                ||   1) Plus de détails sur un projet                             ||
-                ||   2) Revenir à l'accueil                                       ||
-                ||                                                                ||
-                \\\\================================================================//
-                        Votre choix :   """);
-
-        choice = input.nextInt();
-
-        switch (choice) {
+        String entete = """
+        //========================================================================================================\\\\
+        ||                                     Nouveautés sur les entraves                                        ||
+        ||                                          Dans votre région :                                           ||
+        ||--------------------------------------------------------------------------------------------------------||
+        ||--------------------------------------------------------------------------------------------------------||
+        """;
+        String footer = """
+        ||--------------------------------------------------------------------------------------------------------||
+        ||                                                                                                        ||
+        ||  1) Revenir à l'accueil                                                                                ||
+        ||  2) Revenir à la page précédente                                                                       ||
+        ||  3) Aller à la page suivante                                                                           ||
+        ||                                                                                                        ||
+        \\\\========================================================================================================//
+                                    Votre choix :   """;
+        String body= entete;
+        int i  = index*7;
+        int borne = (index+1)*7;
+        for (; i < borne; i++) {
+            if (i<entravesArrayList.size()) {
+                body += entravesArrayList.get(i);
+                body += "||--------------------------------------------------------------------------------------------------------||\n";
+            }else break;
+        }
+        body+=footer;
+        System.out.print(body);
+        choice = scanner.nextInt();
+        clearScreen();
+        switch (choice){
             case 1:
-                exempleTravail(manager, travauxArrayList,entravesArrayList);
+                homePageManager(manager, travauxArrayList, entravesArrayList);
                 break;
             case 2:
-                homePageManager(manager, travauxArrayList, entravesArrayList);
+                if (i<entravesArrayList.size()){
+                    index++;
+                    entravesManager(manager, travauxArrayList, entravesArrayList, index);
+                }else {
+                    System.err.println("Vous êtes rendu à la fin de la liste.");
+                    entravesManager(manager, travauxArrayList, entravesArrayList, index);
+                }
+                break;
+            case 3:
+                if (index > 0){
+                    index--;
+                    entravesManager(manager, travauxArrayList, entravesArrayList, index);
+                }else {
+                    System.err.println("On ne peut pas retourner plus en arrière.");
+                    entravesManager(manager, travauxArrayList, entravesArrayList, index);
+                }
                 break;
             default:
                 System.err.println("Votre choix est introuvable");
-                travauxManager(manager, travauxArrayList, entravesArrayList);
+                entravesManager(manager, travauxArrayList, entravesArrayList, index);
+                break;
+
+        }
+
+
+        clearScreen();
+    }
+    public void travauxManager(Manager manager, ArrayList<Travaux> travauxArrayList,
+                               ArrayList<Entraves> entravesArrayList, int index) {
+        Scanner scanner = new Scanner(System.in);
+        int choice=0;
+        String entete = """
+        //========================================================================================================\\\\
+        ||                                     Nouveautés sur les constructions                                   ||
+        ||                                          Dans votre région :                                           ||
+        ||--------------------------------------------------------------------------------------------------------||
+        ||--------------------------------------------------------------------------------------------------------||
+        """;
+        String footer = """
+        ||--------------------------------------------------------------------------------------------------------||
+        ||                                                                                                        ||
+        ||  1) Plus de détails sur un projet                                                                      ||
+        ||  2) Revenir à la page précédente                                                                       ||
+        ||  3) Aller à la page suivante                                                                           ||
+        ||  4) Revenir à l'accueil                                                                                ||
+        ||                                                                                                        ||
+        \\\\========================================================================================================//
+                        Votre choix :   """;
+        String body= entete;
+        int i  = index*7;
+        int borne = (index+1)*7;
+        for (; i < borne; i++) {
+            if (i<entravesArrayList.size()) {
+                body += travauxArrayList.get(i);
+                body += "||-------------------------------------------------------------------------------------------------------||\n";
+            }else break;
+        }
+        body+=footer;
+        System.out.print(body);
+        try {
+            choice = scanner.nextInt();
+        }catch (Exception e) {
+            System.err.println("Votre entrée est invalide!");
+            travauxManager(manager, travauxArrayList, entravesArrayList, index);
+        }
+
+        switch (choice) {
+            case 1:
+                int id;
+                System.out.print("Entrez l'index du projet : ");
+                id = scanner.nextInt();
+                exempleTravail(manager, travauxArrayList,entravesArrayList, id);
+                break;
+            case 2:
+                if (index > 0){
+                    index--;
+                    travauxManager(manager, travauxArrayList, entravesArrayList, index);
+                }else {
+                    System.err.println("Vous êtes rendu à la fin de la liste.");
+                    travauxManager(manager, travauxArrayList, entravesArrayList, index);
+                }
+                break;
+            case 3:
+                if (i<entravesArrayList.size()){
+                    index++;
+                    travauxManager(manager, travauxArrayList, entravesArrayList, index);
+                }else {
+                    System.err.println("On ne peut pas retourner plus en arrière.");
+                    travauxManager(manager, travauxArrayList, entravesArrayList, index);
+                }
+                break;
+            default:
+                System.err.println("Votre choix est introuvable");
+                travauxManager(manager, travauxArrayList, entravesArrayList, index);
                 break;
         }
 
@@ -233,7 +310,7 @@ public class DisplayManager {
     }
 
     public void exempleTravail(Manager manager,  ArrayList<Travaux> travauxArrayList,
-                               ArrayList<Entraves> entravesArrayList) {
+                               ArrayList<Entraves> entravesArrayList, int index) {
         Scanner input = new Scanner(System.in);
         int choice;
         System.out.print("""
@@ -286,7 +363,7 @@ public class DisplayManager {
                 break;
             default:
                 System.err.println("Votre choix est introuvable");
-                exempleTravail(manager, travauxArrayList,entravesArrayList);
+                exempleTravail(manager, travauxArrayList,entravesArrayList, index);
                 break;
         }
     }

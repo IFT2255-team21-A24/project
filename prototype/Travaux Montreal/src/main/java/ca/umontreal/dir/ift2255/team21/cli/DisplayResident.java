@@ -1,13 +1,21 @@
 package ca.umontreal.dir.ift2255.team21.cli;
 
 import ca.umontreal.dir.ift2255.team21.accounts.Resident;
+import ca.umontreal.dir.ift2255.team21.apihandler.AddressVerificator;
 import ca.umontreal.dir.ift2255.team21.apihandler.TransformAddress;
+import ca.umontreal.dir.ift2255.team21.databasehandler.InsertData;
 import ca.umontreal.dir.ift2255.team21.distancecalculator.CalculateDistance;
 import ca.umontreal.dir.ift2255.team21.entraves.Entraves;
 import ca.umontreal.dir.ift2255.team21.entraves.Travaux;
+import ca.umontreal.dir.ift2255.team21.requests.Requests;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class DisplayResident {
     public void homePageResident(Resident resident, ArrayList<Travaux> travauxArrayList,
@@ -32,6 +40,7 @@ public class DisplayResident {
         ||  2) Consultation des entraves.                                                                         ||
         ||  3) Soumission de requête                                                                              ||
         ||  4) Planification participative                                                                        ||
+        ||  4) Recherche de travaux                                                                               ||
         ||  5) Se déconnecter                                                                                     ||
         ||                                                                                                        ||
         \\\\========================================================================================================//
@@ -39,9 +48,11 @@ public class DisplayResident {
 
         int choice;
         String affichage = entete;
-        for (Entraves travaux : entravesProches) {
-            affichage += travaux.toString();
-            affichage += "||--------------------------------------------------------------------------------------------------------||\n";
+        for (int i = 0; i < 3; i++) {
+            if (i<entravesProches.size()) {
+                affichage += entravesProches.get(i);
+                affichage += "||--------------------------------------------------------------------------------------------------------||\n";
+            }else break;
         }
         affichage += footer;
         System.out.print(affichage);
@@ -61,6 +72,9 @@ public class DisplayResident {
                 participation(resident, travauxArrayList,entravesArrayList);
                 break;
             case 5:
+                rechercheTravaux(resident, travauxArrayList,entravesArrayList);
+                break;
+            case 6:
                 resident = null;
                 break;
             default:
@@ -97,7 +111,7 @@ public class DisplayResident {
         for (; i < borne; i++) {
             if (i<entravesArrayList.size()) {
                 body += travauxArrayList.get(i);
-                body += "||--------------------------------------------------------------------------------------------------------||\n";
+                body += "||-------------------------------------------------------------------------------------------------------||\n";
             }else break;
         }
         body+=footer;
@@ -114,8 +128,8 @@ public class DisplayResident {
                 homePageResident(resident, travauxArrayList, entravesArrayList);
                 break;
             case 2:
-                if (i<entravesArrayList.size()){
-                    index++;
+                if (index > 0){
+                    index--;
                     travauxResident(resident, travauxArrayList, entravesArrayList, index);
                 }else {
                     System.err.println("Vous êtes rendu à la fin de la liste.");
@@ -123,8 +137,8 @@ public class DisplayResident {
                 }
                 break;
             case 3:
-                if (index > 0){
-                    index--;
+                if (i<entravesArrayList.size()){
+                    index++;
                     travauxResident(resident, travauxArrayList, entravesArrayList, index);
                 }else {
                     System.err.println("On ne peut pas retourner plus en arrière.");
@@ -209,46 +223,118 @@ public class DisplayResident {
     public void soumissionRequete(Resident resident, ArrayList<Travaux> travauxArrayList,
                                   ArrayList<Entraves> entravesArrayList) {
         Scanner scanner = new Scanner(System.in);
+        Scanner dataentry = new Scanner(System.in);
+        String name="", type="", address="";
+        String format = "dd-MM-yyyy";
+        String date="";
+        Date date1 = null;
+        double longitude = 0, latitude = 0;
         int choice;
         System.out.print("""
-                //=============================================================\\\\
-                ||           Soumission de requête pour un projet              ||
-                ||                 Ville de Montréal                           ||
-                ||-------------------------------------------------------------||
-                ||                                                             ||
-                ||   1) Nom du projet : _________________________________      ||
-                ||                                                             ||
-                ||   2) Localisation du projet : ________________________      ||
-                ||                                                             ||
-                ||   3) Type de projet :                                       ||
-                ||      [ ] Réparation de routes                               ||
-                ||      [ ] Réseau d'aqueduc                                   ||
-                ||      [ ] Conduites de gaz                                   ||
-                ||      [ ] Installation de lampadaires                        ||
-                ||      [ ] Autre : ___________________________________        ||
-                ||                                                             ||
-                ||   4) Date de début souhaité : ____/____/______              ||
-                ||                                                             ||
-                ||   5) Détails supplémentaires : ________________________     ||
-                ||                            ____________________________     ||
-                ||                                                             ||
-                ||-------------------------------------------------------------||
-                ||                                                             ||
-                ||   8) Envoyer la requête                                     ||
-                ||   9) Annuler                                                ||
-                ||                                                             ||
-                \\\\=============================================================//
-                        Votre choix :   """);
-        choice = scanner.nextInt();
-        clearScreen();
-        switch (choice){
-            case 8,9:
-                homePageResident(resident, travauxArrayList, entravesArrayList);
-                break;
-            default:
-                System.err.println("Votre choix est introuvable");
-                soumissionRequete(resident, travauxArrayList, entravesArrayList);
-        }
+        //========================================================================================================\\\\
+        ||                                   Soumission de requête pour un projet                                 ||
+        ||                                           Ville de Montréal                                            ||
+        ||--------------------------------------------------------------------------------------------------------||
+        ||                                    Sélectionnez les champs à modifier                                  ||
+        ||--------------------------------------------------------------------------------------------------------||
+        ||   1) Nom du projet : __________________________________________                                        ||
+        ||                                                                                                        ||
+        ||   2) Localisation du projet : __________________________________                                       ||
+        ||                                                                                                        ||
+        ||   3) Type de projet :                                                                                  ||
+        ||      [ ] Réparation de routes                                                                          ||
+        ||      [ ] Réseau d'aqueduc                                                                              ||
+        ||      [ ] Conduites de gaz                                                                              ||
+        ||      [ ] Installation de lampadaires                                                                   ||
+        ||                                                                                                        ||
+        ||   4) Date de début souhaité : ____/____/___________                                                    ||
+        ||                                                                                                        ||
+        ||--------------------------------------------------------------------------------------------------------||
+        ||                                                                                                        ||
+        ||   8) Envoyer la requête                                                                                ||
+        ||   9) Annuler                                                                                           ||
+        ||                                                                                                        ||
+        \\\\========================================================================================================//""");
+        do {
+            System.out.print("Votre choix :   ");
+            choice = scanner.nextInt();
+            switch (choice){
+                case 1:
+                    System.out.print("1) Nom du projet : ");
+                    name = dataentry.nextLine();
+                    break;
+                case 2:
+                    System.out.print("2) localisation du projet (addresse) : ");
+                    name = dataentry.nextLine();
+                    if (!AddressVerificator.verifyAddress(address)){
+                        address = "";
+                        System.err.println("L'addresse est mauvaise ou introuvable.");
+                    }else {
+                        TransformAddress transformAddress = new TransformAddress();
+                        String[] parts = transformAddress.transform(address).split(",");
+                        // Convertir chaque partie en double
+                        latitude = Double.parseDouble(parts[0]);
+                        longitude = Double.parseDouble(parts[1]);
+                    }
+                    break;
+                case 3:
+                    System.out.print("""
+        3) Type de projet :
+          1-  [ ] Réparation de routes
+          2-  [ ] Réseau d'aqueduc
+          3-  [ ] Conduites de gaz
+          4-  [ ] Installation de lampadaires
+          
+          Choix :: """);
+                    int raison = scanner.nextInt();
+                    switch (raison){
+                        case 1:
+                            type = "Réparation de routes";
+                            break;
+                        case 2:
+                            type = "Réseau d'aqueduc";
+                            break;
+                        case 3:
+                            type = "Conduites de gaz";
+                            break;
+                        case 4:
+                            type = "Installation de lampadaires";
+                            break;
+                        default:
+                            System.err.println("Choix non trouvable!");
+                            break;
+                    }
+                    break;
+                case 4:
+                    System.out.print("4) Date de début souhaité (DD-MM-YYYY) :   ");
+                    date = dataentry.nextLine();
+                    Date sqlDate = convertToSQLDate(date, format);
+                    if (sqlDate==null){
+                        System.err.println("La date est dans un mauvais format!");
+                        date = "";
+                    }else {
+                        date1 = sqlDate;
+                    }
+                    break;
+                case 8:
+                    if ((name.equals("")||date.equals("")||type.equals("")||address.equals(""))) {
+                    System.err.println("Le tableau n'est pas rempli, voici vos données:\n" + name + "\n"+ date + "\n"
+                            + type + "\n"+ address + "\n");
+                }else {
+                        Requests requests = new Requests(name, type, address, latitude, longitude, date1);
+                        InsertData.insertRequest(requests);
+                        homePageResident(resident, travauxArrayList,entravesArrayList);
+                    }
+
+                    break;
+                case 9:
+                    homePageResident(resident, travauxArrayList, entravesArrayList);
+                    break;
+                default:
+                    System.err.println("Votre choix est introuvable");
+                    soumissionRequete(resident, travauxArrayList, entravesArrayList);
+            }
+        }while (true);
     }
     public void rechercheTravaux(Resident resident, ArrayList<Travaux> travauxArrayList,
                                  ArrayList<Entraves> entravesArrayList) {
@@ -258,6 +344,8 @@ public class DisplayResident {
                 //==================================================\\\\
                 ||               Recherche de travaux               ||
                 ||                  Ville de Montréal               ||
+                ||--------------------------------------------------||
+                ||---------Cette partie est en développement--------||
                 ||--------------------------------------------------||
                 ||                                                  ||
                 ||   1) Rechercher par titre du projet              ||
@@ -277,8 +365,11 @@ public class DisplayResident {
         choice = scanner.nextInt();
         clearScreen();
         switch (choice){
-            case 1, 2, 3, 4, 0:
+            case 1, 2, 3, 4:
                 travauxResident(resident, travauxArrayList, entravesArrayList, 0);
+                break;
+            case 0:
+                homePageResident(resident, travauxArrayList, entravesArrayList);
                 break;
             default:
                 System.err.println("Erreur de choix !\n");
@@ -304,6 +395,8 @@ public class DisplayResident {
                 ||                   Gestion des travaux dans votre quartier                   ||
                 ||                              Ville de Montréal                              ||
                 ||-----------------------------------------------------------------------------||
+                ||----------------------Cette partie est en développement----------------------||
+                ||-----------------------------------------------------------------------------||
                 ||                                                                             ||
                 ||   1) Indiquer vos plages horaires préférées pour les travaux                ||
                 ||                                                                             ||
@@ -328,47 +421,19 @@ public class DisplayResident {
                 soumissionRequete(resident, travauxArrayList, entravesArrayList);
         }
     }
-    public void exempleTravaux(Resident resident, ArrayList<Travaux> travauxArrayList,
-                               ArrayList<Entraves> entravesArrayList) {
-        Scanner scanner = new Scanner(System.in);
-        int choice;
-        System.out.println("""
-                //======================================================================\\\\
-                ||                    Détails d'un chantier en cours                    ||
-                ||                           Ville de Montréal                          ||
-                ||----------------------------------------------------------------------||
-                ||                                                                      ||
-                ||   1) Titre du projet : Réparation des conduites d'eau                ||
-                ||                                                                      ||
-                ||   2) Type de travaux : Remplacement des conduites d'eau              ||
-                ||                                                                      ||
-                ||   3) Quartier affecté : Plateau-Mont-Royal                           ||
-                ||                                                                      ||
-                ||   4) Rue(s) affectée(s) : Avenue du Parc, Rue Rachel                 ||
-                ||                                                                      ||
-                ||   5) Date de début : 05/10/2024                                      ||
-                ||                                                                      ||
-                ||   6) Date de fin prévue : 20/12/2024                                 ||
-                ||                                                                      ||
-                ||   7) Horaire des travaux : Lundi - Vendredi, 7h à 17h                ||
-                ||                                                                      ||
-                ||   8) Intervenant responsable : Jean Tremblay                         ||
-                ||                                                                      ||
-                ||   9) Contact pour plus d'informations : travaux@montreal.ca          ||
-                ||                                                                      ||
-                ||----------------------------------------------------------------------||
-                ||                                                                      ||
-                ||   0) Retourner à la liste des travaux                                ||
-                ||                                                                      ||
-                \\\\======================================================================//
-                        Votre choix :   """);
-        choice = scanner.nextInt();
-        clearScreen();
-        if (choice == 0){
-            homePageResident(resident, travauxArrayList, entravesArrayList);
-        }else{
-            System.err.println("Votre choix est introuvable!\n");
-            exempleTravaux(resident, travauxArrayList, entravesArrayList);
+    public static java.sql.Date convertToSQLDate(String date, String format) {
+        try {
+            // Définir le format
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
+
+            // Parser la chaîne en LocalDate
+            LocalDate localDate = LocalDate.parse(date, formatter);
+
+            // Convertir LocalDate en java.sql.Date
+            return Date.valueOf(localDate);
+        } catch (DateTimeParseException e) {
+            // En cas d'erreur de parsing
+            return null;
         }
     }
 
