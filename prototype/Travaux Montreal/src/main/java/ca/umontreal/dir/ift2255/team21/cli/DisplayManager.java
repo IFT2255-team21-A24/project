@@ -18,6 +18,7 @@ public class DisplayManager {
     public void homePageManager(Manager manager,  ArrayList<Travaux> travauxArrayList,
                                 ArrayList<Entraves> entravesArrayList) {
         Scanner input = new Scanner(System.in);
+        int choice=0;
         String entete = """
         //========================================================================================================\\\\
         ||                                     Nouveautés sur les constructions                                   ||
@@ -39,7 +40,7 @@ public class DisplayManager {
         ||  5) Se déconnecter                                                                                     ||
         ||                                                                                                        ||
         \\\\========================================================================================================//
-                                    Votre choix :   """;        int choice;
+                                    Votre choix :   """;
         String affichage = entete;
         for (Entraves travaux : entravesProches) {
             affichage += travaux.toString();
@@ -47,7 +48,12 @@ public class DisplayManager {
         }
         affichage += footer;
         System.out.print(affichage);
-        choice = input.nextInt();
+        try {
+            choice = input.nextInt();
+        }catch (Exception e) {
+            System.err.println("Votre entrée est invalide!");
+            homePageManager(manager, travauxArrayList, entravesArrayList);
+        }
         clearScreen();
 
         switch (choice){
@@ -72,7 +78,7 @@ public class DisplayManager {
     public void entravesManager(Manager manager, ArrayList<Travaux> travauxArrayList,
                                  ArrayList<Entraves> entravesArrayList, int index) {
         Scanner scanner = new Scanner(System.in);
-        int choice;
+        int choice=0;
         String entete = """
         //========================================================================================================\\\\
         ||                                     Nouveautés sur les entraves                                        ||
@@ -100,7 +106,12 @@ public class DisplayManager {
         }
         body+=footer;
         System.out.print(body);
-        choice = scanner.nextInt();
+        try {
+            choice = scanner.nextInt();
+        }catch (Exception e) {
+            System.err.println("Votre entrée est invalide!");
+            entravesManager(manager, travauxArrayList, entravesArrayList, index);
+        }
         clearScreen();
         switch (choice){
             case 1:
@@ -307,19 +318,19 @@ public class DisplayManager {
             case 1:
                 if (index > 0){
                     index--;
-                    travauxManager(manager, travauxArrayList, entravesArrayList, index);
+                    consulterRequete(manager, travauxArrayList, entravesArrayList, index);
                 }else {
                     System.err.println("Vous êtes rendu à la fin de la liste.");
-                    travauxManager(manager, travauxArrayList, entravesArrayList, index);
+                    consulterRequete(manager, travauxArrayList, entravesArrayList, index);
                 }
                 break;
             case 2:
                 if (i<entravesArrayList.size()){
                     index++;
-                    travauxManager(manager, travauxArrayList, entravesArrayList, index);
+                    consulterRequete(manager, travauxArrayList, entravesArrayList, index);
                 }else {
                     System.err.println("On ne peut pas retourner plus en arrière.");
-                    travauxManager(manager, travauxArrayList, entravesArrayList, index);
+                    consulterRequete(manager, travauxArrayList, entravesArrayList, index);
                 }
                 break;
             case 3:
@@ -335,7 +346,7 @@ public class DisplayManager {
     public void exempleTravail(Manager manager,  ArrayList<Travaux> travauxArrayList,
                                ArrayList<Entraves> entravesArrayList, int index) {
         Scanner input = new Scanner(System.in);
-        int choice;
+        int choice=0;
         System.out.print("""
                 //=================================================================\\\\
                 ||                   Détails du travail en cours                   ||
@@ -378,7 +389,12 @@ public class DisplayManager {
                 ||                                                                 ||
                 \\\\=================================================================//
                          Votre choix :    """);
-        choice = input.nextInt();
+        try {
+            choice = input.nextInt();
+        }catch (Exception e) {
+            System.err.println("Votre entrée est invalide!");
+            exempleTravail(manager, travauxArrayList, entravesArrayList, index);
+        }
         clearScreen();
         switch (choice) {
             case 0,1,2,3,4,5,6,7,8,9:

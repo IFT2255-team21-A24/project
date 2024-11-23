@@ -158,7 +158,7 @@ public class DisplayResident {
     public void entravesResident(Resident resident, ArrayList<Travaux> travauxArrayList,
                                 ArrayList<Entraves> entravesArrayList, int index) {
         Scanner scanner = new Scanner(System.in);
-        int choice;
+        int choice=0;
         String entete = """
         //========================================================================================================\\\\
         ||                                     Nouveautés sur les constructions                                   ||
@@ -186,7 +186,12 @@ public class DisplayResident {
         }
         body+=footer;
         System.out.print(body);
-        choice = scanner.nextInt();
+        try {
+            choice = scanner.nextInt();
+        }catch (Exception e) {
+            System.err.println("Votre entrée est invalide!");
+            entravesResident(resident, travauxArrayList, entravesArrayList, index);
+        }
         clearScreen();
         switch (choice){
             case 1:
@@ -229,7 +234,7 @@ public class DisplayResident {
         String date="";
         Date date1 = null;
         double longitude = 0, latitude = 0;
-        int choice;
+        int choice=0;
         System.out.print("""
         //========================================================================================================\\\\
         ||                                   Soumission de requête pour un projet                                 ||
@@ -257,7 +262,12 @@ public class DisplayResident {
         \\\\========================================================================================================//""");
         do {
             System.out.print("Votre choix :   ");
-            choice = scanner.nextInt();
+            try {
+                choice = scanner.nextInt();
+            }catch (Exception e) {
+                System.err.println("Votre entrée est invalide!");
+                soumissionRequete(resident, travauxArrayList, entravesArrayList);
+            }
             switch (choice){
                 case 1:
                     System.out.print("1) Nom du projet : ");
@@ -339,7 +349,7 @@ public class DisplayResident {
     public void rechercheTravaux(Resident resident, ArrayList<Travaux> travauxArrayList,
                                  ArrayList<Entraves> entravesArrayList) {
         Scanner scanner = new Scanner(System.in);
-        int choice;
+        int choice=0;
         System.out.print("""
                 //==================================================\\\\
                 ||               Recherche de travaux               ||
@@ -362,7 +372,12 @@ public class DisplayResident {
                 ||                                                  ||
                 \\\\==================================================//
                         Votre choix :   """);
-        choice = scanner.nextInt();
+        try {
+            choice = scanner.nextInt();
+        }catch (Exception e) {
+            System.err.println("Votre entrée est invalide!");
+            rechercheTravaux(resident, travauxArrayList, entravesArrayList);
+        }
         clearScreen();
         switch (choice){
             case 1, 2, 3, 4:
