@@ -12,8 +12,8 @@ public class AddressVerificator {
 
         try {
         // URL de requête
-        String urlString = "https://maps.googleapis.com/maps/api/geocode/json?address="
-                + address.replace(" ", "+") + "&key=" + DataForConnection.GOOGLEKEY;
+            String urlString = "https://maps.googleapis.com/maps/api/geocode/json?address="
+                    + address.replace(" ", "+") + "&key=" + DataForConnection.GOOGLEKEY.getUrl();
 
         // Créer une connexion HTTP
         URL url = new URL(urlString);

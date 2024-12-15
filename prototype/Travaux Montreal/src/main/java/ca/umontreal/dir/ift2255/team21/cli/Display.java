@@ -59,6 +59,8 @@ public class Display {
             introScreen();
         }else if(menuChoice == 1){
             seConnecter();
+        }else if(menuChoice == 2){
+            Inscription.Inscrire();
         }
     }
     public void seConnecter(){
