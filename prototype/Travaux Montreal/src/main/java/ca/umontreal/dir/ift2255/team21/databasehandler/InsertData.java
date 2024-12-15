@@ -19,6 +19,7 @@ public class InsertData {
 
         Connection conn = null;
         PreparedStatement ps = null;
+        passwordHash = PasswordHash.hashPassword(passwordHash);
 
         try {
             // Charger le driver JDBC MySQL
