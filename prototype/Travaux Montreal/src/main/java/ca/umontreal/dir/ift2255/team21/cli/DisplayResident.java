@@ -43,8 +43,7 @@ public class DisplayResident {
         ||  4) Rechercher des entraves.                                                                           ||
         ||  5) Soumission de requête                                                                              ||
         ||  6) Planification participative                                                                        ||
-        ||  7) Recherche de travaux                                                                               ||
-        ||  8) Se déconnecter                                                                                     ||
+        ||  7) Se déconnecter                                                                                     ||
         ||                                                                                                        ||
         \\\\========================================================================================================//
                                     Votre choix :   """;
@@ -81,9 +80,6 @@ public class DisplayResident {
                 participation(resident, travauxArrayList,entravesArrayList);
                 break;
             case 7:
-                rechercheTravaux(resident, travauxArrayList,entravesArrayList);
-                break;
-            case 8:
                 resident = null;
                 break;
             default:
@@ -219,7 +215,7 @@ public class DisplayResident {
                 ,"Lachine","L'Île-Bizard-Sainte-Geneviève","LaSalle","Le Plateau-Mont-Royal","Le Sud-Ouest"
                 ,"Mercier-Hochelaga-Maisonneuve","Montréal-Nord","Pierrefonds-Roxboro","Rivière-des-Prairies-Pointe-aux-Trembles"
                 ,"Rosemont-La-Petite-Patrie","Saint-Léonard","St-Laurent","Verdun","Ville-Marie", "Villeray-Saint-Michel-Parc-Extension"};
-        System.out.println("""
+        System.out.print("""
         //========================================================================================================\\\\
         ||                                    Entrez le nom du quartier que vous                                  ||
         ||                                      voulez utiliser comme filtre :                                    ||
@@ -612,7 +608,7 @@ public class DisplayResident {
                     }
                     break;
                 case 8:
-                    if ((name.equals("")||date.equals("")||type.equals("")||address.equals(""))) {
+                    if ((name.isBlank()||date.isBlank()||type.isBlank()||address.isBlank())) {
                     System.err.println("Le tableau n'est pas rempli, voici vos données:\n" + name + "\n"+ date + "\n"
                             + type + "\n"+ address + "\n");
                 }else {
@@ -630,52 +626,6 @@ public class DisplayResident {
                     soumissionRequete(resident, travauxArrayList, entravesArrayList);
             }
         }while (true);
-    }
-    private void rechercheTravaux(Resident resident, ArrayList<Travaux> travauxArrayList,
-                                 ArrayList<Entraves> entravesArrayList) {
-        Scanner scanner = new Scanner(System.in);
-        int choice=0;
-        System.out.print("""
-                //==================================================\\\\
-                ||               Recherche de travaux               ||
-                ||                  Ville de Montréal               ||
-                ||--------------------------------------------------||
-                ||---------Cette partie est en développement--------||
-                ||--------------------------------------------------||
-                ||                                                  ||
-                ||   1) Rechercher par titre du projet              ||
-                ||                                                  ||
-                ||   2) Rechercher par type de travaux              ||
-                ||                                                  ||
-                ||   3) Rechercher par quartier                     ||
-                ||                                                  ||
-                ||   4) Rechercher par rue                          ||
-                ||                                                  ||
-                ||--------------------------------------------------||
-                ||                                                  ||
-                ||   0) Retourner au menu principal                 ||
-                ||                                                  ||
-                \\\\==================================================//
-                        Votre choix :   """);
-        try {
-            choice = scanner.nextInt();
-        }catch (Exception e) {
-            System.err.println("Votre entrée est invalide!");
-            rechercheTravaux(resident, travauxArrayList, entravesArrayList);
-        }
-        clearScreen();
-        switch (choice){
-            case 1, 2, 3, 4:
-                travauxResident(resident, travauxArrayList, entravesArrayList, 0);
-                break;
-            case 0:
-                homePageResident(resident, travauxArrayList, entravesArrayList);
-                break;
-            default:
-                System.err.println("Erreur de choix !\n");
-                rechercheTravaux(resident, travauxArrayList, entravesArrayList);
-        }
-
     }
 
     private static void clearScreen() {

@@ -3,12 +3,18 @@ package ca.umontreal.dir.ift2255.team21.cli;
 import ca.umontreal.dir.ift2255.team21.accounts.Manager;
 import ca.umontreal.dir.ift2255.team21.accounts.Resident;
 import ca.umontreal.dir.ift2255.team21.apihandler.TransformAddress;
+import ca.umontreal.dir.ift2255.team21.databasehandler.InsertData;
 import ca.umontreal.dir.ift2255.team21.databasehandler.RequestsDB;
 import ca.umontreal.dir.ift2255.team21.distancecalculator.CalculateDistance;
 import ca.umontreal.dir.ift2255.team21.entraves.Entraves;
 import ca.umontreal.dir.ift2255.team21.entraves.Travaux;
 import ca.umontreal.dir.ift2255.team21.requests.Requests;
+import ca.umontreal.dir.ift2255.team21.requests.RquestsIntervenant;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -61,7 +67,7 @@ public class DisplayManager {
                 travauxManager(manager, travauxArrayList, entravesArrayList,0);
                 break;
             case 3:
-                soumissionRequete(manager, travauxArrayList, entravesArrayList);
+                soumissionRequete(manager, travauxArrayList, entravesArrayList,"","",new String[]{"","",""},"");
                 break;
             case 4:
                 consulterRequete(manager, travauxArrayList, entravesArrayList,0);
@@ -159,10 +165,9 @@ public class DisplayManager {
         String footer = """
         ||--------------------------------------------------------------------------------------------------------||
         ||                                                                                                        ||
-        ||  1) Plus de détails sur un projet                                                                      ||
-        ||  2) Revenir à la page précédente                                                                       ||
-        ||  3) Aller à la page suivante                                                                           ||
-        ||  4) Revenir à l'accueil                                                                                ||
+        ||  1) Revenir à la page précédente                                                                       ||
+        ||  2) Aller à la page suivante                                                                           ||
+        ||  3) Revenir à l'accueil                                                                                ||
         ||                                                                                                        ||
         \\\\========================================================================================================//
                         Votre choix :   """;
@@ -185,27 +190,24 @@ public class DisplayManager {
         }
 
         switch (choice) {
-            case 1:
-                int id;
-                System.out.print("Entrez l'index du projet : ");
-                id = scanner.nextInt();
-                exempleTravail(manager, travauxArrayList,entravesArrayList, id);
+            case 3:
+                homePageManager(manager, travauxArrayList, entravesArrayList);
                 break;
-            case 2:
+            case 1:
                 if (index > 0){
                     index--;
                     travauxManager(manager, travauxArrayList, entravesArrayList, index);
                 }else {
-                    System.err.println("Vous êtes rendu à la fin de la liste.");
+                    System.err.println("On ne peut pas retourner plus en arrière.");
                     travauxManager(manager, travauxArrayList, entravesArrayList, index);
                 }
                 break;
-            case 3:
+            case 2:
                 if (i<entravesArrayList.size()){
                     index++;
                     travauxManager(manager, travauxArrayList, entravesArrayList, index);
                 }else {
-                    System.err.println("On ne peut pas retourner plus en arrière.");
+                    System.err.println("Vous êtes rendu à la fin de la liste.");
                     travauxManager(manager, travauxArrayList, entravesArrayList, index);
                 }
                 break;
@@ -219,57 +221,146 @@ public class DisplayManager {
     }
 
     public void soumissionRequete(Manager manager,  ArrayList<Travaux> travauxArrayList,
-                                  ArrayList<Entraves> entravesArrayList) {
+                                  ArrayList<Entraves> entravesArrayList, String nom, String type, String[] croisement,
+                                  String date) {
         Scanner input = new Scanner(System.in);
+        Scanner keyboard = new Scanner(System.in);
+        String format = "dd-MM-yyyy";
+
         int choice=0;
-        System.out.print("""
+        String entete = """
                 //=============================================================\\\\
                 ||           Soumission de requête pour un projet              ||
                 ||                 Ville de Montréal                           ||
                 ||-------------------------------------------------------------||
-                ||                                                             ||
-                ||   1) Nom du projet : _________________________________      ||
-                ||                                                             ||
-                ||   3) Type de projet :                                       ||
-                ||      [ ] Réparation de routes                               ||
-                ||      [ ] Réseau d'aqueduc                                   ||
-                ||      [ ] Conduites de gaz                                   ||
-                ||      [ ] Installation de lampadaires                        ||
-                ||      [ ] Autre : ___________________________________        ||
-                ||                                                             ||
-                ||   5) Rues affectées : _________________________________     ||
-                ||                       ___________________________________   ||
-                ||                                                             ||
-                ||   6) Date de début : ____/____/______                       ||
-                ||                                                             ||
-                ||   7) Date de fin : ____/____/______                         ||
-                ||                                                             ||
-                ||   8) Horaire des travaux : _____________________________    ||
-                ||                         _________________________________   ||
-                ||                                                             ||
+                """;
+        String footer = """
                 ||-------------------------------------------------------------||
                 ||   # Ici, choisissez le numéro du champ de text à modifier   ||
-                ||   9) Soumettre la requête                                   ||
+                ||   7) Soumettre la requête                                   ||
                 ||   0) Annuler                                                ||
                 ||                                                             ||
                 \\\\===========================================================//
-                        Votre choix :   """);
+                        Votre choix :   """;
+        String body= entete + "     Nom de projet : " + nom +"\n"+"     Type de projet : " + type + "\n" + "     Croisements :\n";
+        for (int i = 0; i < croisement.length; i++) {
+            body += croisement[i];
+            body += "\n";
+        }
+        body+= "     Date début : " + date + "\n" + "     Status : " + "\n" + footer;
+
+        System.out.print(body);
 
         try {
             choice = input.nextInt();
         }catch (Exception e) {
             System.err.println("Votre entrée est invalide!");
-            soumissionRequete(manager, travauxArrayList, entravesArrayList);
+            soumissionRequete(manager, travauxArrayList, entravesArrayList, nom, type,croisement,date);
         }
 
         clearScreen();
         switch (choice) {
-            case 0,1,2,3,4,5,6,7,8,9:
+            case 1:
+                String projet = "";
+                System.out.print("Entrez le nom du projet : ");
+                projet = keyboard.nextLine();
+                if (projet.isBlank()){
+                    System.err.println("Nom de projet vide!");
+                }
+                soumissionRequete(manager, travauxArrayList, entravesArrayList, projet, type,croisement,date);
+                break;
+            case 2:
+                int choix=0;
+                System.out.println("""
+                =================================================================
+                ||      Type de projet :                                       ||
+                ||      [1] Réparation de routes                               ||
+                ||      [2] Réseau d'aqueduc                                   ||
+                ||      [3] Conduites de gaz                                   ||
+                ||      [4] Installation de lampadaires                        ||
+                ||      [5] Autre : ___________________________________        ||
+                        """);
+                try {
+                    choix = input.nextInt();
+                }catch (Exception e) {
+                    System.err.println("Votre entrée est invalide!");
+                    soumissionRequete(manager, travauxArrayList, entravesArrayList, nom, type,croisement,date);
+                }
+                String type_de_projet = "";
+                switch (choix) {
+                    case 1:
+                        type_de_projet = "Réparation de routes";
+                        break;
+                    case 2:
+                        type_de_projet="Réseau d'aqueduc";
+                        break;
+                    case 3:
+                        type_de_projet = "Conduites de gaz";
+                        break;
+                    case 4:
+                        type_de_projet="Installation de lampadaires";
+                        break;
+                    case 5:
+                        System.out.print("Entrez le catégorie du projet : ");
+                        type_de_projet = keyboard.nextLine();
+                        if (type_de_projet.isBlank()){
+                            System.err.println("Type de projet vide!");
+                        }
+                    default:
+                        System.err.println("Votre choix est invalide!");
+                }
+                soumissionRequete(manager, travauxArrayList, entravesArrayList, nom, type_de_projet ,croisement,date);
+                break;
+            case 3:
+                String affectes[] = new String[3];
+                System.out.print("Entrez la route principale");
+                affectes[0] = keyboard.nextLine();
+                if (affectes[0].isBlank()){
+                    System.err.println("Route principale vide!");
+                }
+                System.out.print("Entrez le premier croisement (seulement le nom de la route qui croise la route principale) :");
+                affectes[1] = keyboard.nextLine();
+                if (affectes[1].isBlank()){
+                    System.err.println("Premier croisemente vide!");
+                }
+                System.out.print("Entrez le deuxième croisement (seulement le nom de la route qui croise la route principale) :");
+                affectes[2] = keyboard.nextLine();
+                if (affectes[2].isBlank()){
+                    System.err.println("Deuxième croisemente vide!");
+                }
+                if ((affectes[0].isBlank() || affectes[1].isBlank() || affectes[2].isBlank())){
+                    System.err.println("Il y a des données manquants");
+                    affectes[0] = "";
+                    affectes[1] = "";
+                    affectes[2] = "";
+                }
+                soumissionRequete(manager, travauxArrayList, entravesArrayList, nom, type ,affectes,date);
+                break;
+            case 4:
+                System.out.print("4) Date de début souhaité (DD-MM-YYYY) :   ");
+                date = keyboard.nextLine();
+                Date sqlDate = convertToSQLDate(date, format);
+                if (sqlDate==null){
+                    System.err.println("La date est dans un mauvais format!");
+                    date = "";
+                }
+                soumissionRequete(manager, travauxArrayList, entravesArrayList, nom, type,croisement,date);
+                break;
+            case 7:
+                if (!(nom.isBlank() ||  type.isBlank() ||  date.isBlank() ||  croisement[0].isBlank() ||  croisement[1].isBlank()
+                || croisement[2].isBlank())){
+                    RquestsIntervenant rquestsIntervenant = new RquestsIntervenant(nom,type,croisement,"En Cours",
+                            convertToSQLDate(date, format));
+                    InsertData.insertRequest(rquestsIntervenant, manager);
+                }
+
+
+            case 0:
                 homePageManager(manager, travauxArrayList, entravesArrayList);
                 break;
             default:
                 System.err.println("Votre choix est introuvable");
-                soumissionRequete(manager, travauxArrayList, entravesArrayList);
+                soumissionRequete(manager, travauxArrayList, entravesArrayList, nom, type,croisement,date);
                 break;
         }
     }
@@ -311,7 +402,7 @@ public class DisplayManager {
             choice = input.nextInt();
         }catch (Exception e) {
             System.err.println("Votre entrée est invalide!");
-            soumissionRequete(manager, travauxArrayList, entravesArrayList);
+            consulterRequete(manager, travauxArrayList, entravesArrayList, index);
         }
         clearScreen();
         switch (choice) {
@@ -343,70 +434,6 @@ public class DisplayManager {
         }
     }
 
-    public void exempleTravail(Manager manager,  ArrayList<Travaux> travauxArrayList,
-                               ArrayList<Entraves> entravesArrayList, int index) {
-        Scanner input = new Scanner(System.in);
-        int choice=0;
-        System.out.print("""
-                //=================================================================\\\\
-                ||                   Détails du travail en cours                   ||
-                ||                        Ville de Montréal                        ||
-                ||-----------------------------------------------------------------||
-                ||                                                                 ||
-                ||   1- Titre du projet : Réparation de l'éclairage public         ||
-                ||                                                                 ||
-                ||   2- Description : Remplacer les lampadaires défectueux sur     ||
-                ||      Rue Sherbrooke Ouest, entre Guy et Atwater.                ||
-                ||                                                                 ||
-                ||   3- Type de travaux : Maintenance de l'infrastructure          ||
-                ||                                                                 ||
-                ||   4- Quartiers affectés : Ville-Marie                           ||
-                ||                                                                 ||
-                ||   5- Rue(s) affectée(s) : Rue Sherbrooke Ouest                  ||
-                ||                                                                 ||
-                ||   6- Date de début : 15/10/2024                                 ||
-                ||                                                                 ||
-                ||   7- Date de fin prévue : 30/10/2024                            ||
-                ||                                                                 ||
-                ||   8- Horaire des travaux : Lundi - Vendredi, 8h à 17h           ||
-                ||                                                                 ||
-                ||   9- Intervenant responsable : Paul Leblanc                    ||
-                ||                                                                 ||
-                ||-----------------------------------------------------------------||
-                ||                                                                 ||
-                ||   1) Mettre à jour le titre du projet                           ||
-                ||   2) Mettre à jour la description                               ||
-                ||   3) Mettre à jour le type de travaux                           ||
-                ||   4) Mettre à jour les quartiers affectés                       ||
-                ||   5) Mettre à jour les rues affectées                           ||
-                ||   6) Mettre à jour la date de début                             ||
-                ||   7) Mettre à jour la date de fin prévue                        ||
-                ||   8) Mettre à jour l'horaire des travaux                        ||
-                ||   9) Mettre à jour l'intervenant responsable                    ||
-                ||-----------------------------------------------------------------||
-                ||                                                                 ||
-                ||   0) Retourner à la liste des travaux                           ||
-                ||                                                                 ||
-                \\\\=================================================================//
-                         Votre choix :    """);
-        try {
-            choice = input.nextInt();
-        }catch (Exception e) {
-            System.err.println("Votre entrée est invalide!");
-            exempleTravail(manager, travauxArrayList, entravesArrayList, index);
-        }
-        clearScreen();
-        switch (choice) {
-            case 0,1,2,3,4,5,6,7,8,9:
-                homePageManager(manager, travauxArrayList,entravesArrayList);
-                break;
-            default:
-                System.err.println("Votre choix est introuvable");
-                exempleTravail(manager, travauxArrayList,entravesArrayList, index);
-                break;
-        }
-    }
-
     public static void clearScreen() {
         try {
             final String system = System.getProperty("os.name").toLowerCase();
@@ -415,5 +442,19 @@ public class DisplayManager {
             }
         }catch (Exception e) {}
     }
+    private static java.sql.Date convertToSQLDate(String date, String format) {
+        try {
+            // Définir le format
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
 
+            // Parser la chaîne en LocalDate
+            LocalDate localDate = LocalDate.parse(date, formatter);
+
+            // Convertir LocalDate en java.sql.Date
+            return Date.valueOf(localDate);
+        } catch (DateTimeParseException e) {
+            // En cas d'erreur de parsing
+            return null;
+        }
+    }
 }
