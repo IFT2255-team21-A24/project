@@ -1,7 +1,11 @@
 package ca.umontreal.dir.ift2255.team21.databasehandler;
+import ca.umontreal.dir.ift2255.team21.accounts.Manager;
+import ca.umontreal.dir.ift2255.team21.apihandler.Intersection;
+import ca.umontreal.dir.ift2255.team21.distancecalculator.CalculateDistance;
 import ca.umontreal.dir.ift2255.team21.entraves.Entraves;
 import ca.umontreal.dir.ift2255.team21.entraves.Travaux;
 import ca.umontreal.dir.ift2255.team21.requests.Requests;
+import ca.umontreal.dir.ift2255.team21.requests.RquestsIntervenant;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -132,6 +136,35 @@ public class InsertData {
             ps.setDate(4, request.getBeginDate());
             ps.setDouble(5, request.getLongitude());
             ps.setDouble(6, request.getLatitude());
+            ps.setString(7, request.getStatus());
+            ps.executeUpdate();
+
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+    public static void insertRequest(RquestsIntervenant request, Manager manager) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(jdbcUrl, admin, access);
+            String sqlInsert = "INSERT INTO `RequestsClient` (`Title`, `Rues`, `Quartier`,`TypeDeProjet`," +
+                    "`DateEspere`, `idUserRequest`, `Status`) VALUES (?,?,?,?,?,?,?)";
+            ps = conn.prepareStatement(sqlInsert);
+            ps.setString(1,request.getRequestName());
+            ps.setString(2, request.getRequestDescription().toString());
+            double[] coordinates = Intersection.calculerIntersection(new String[]{request.getRues()[1],request.getRues()[0]},
+                    new String[]{request.getRues()[2],request.getRues()[0]});
+            String quartier = CalculateDistance.trouverQuartier(coordinates[0]+","+coordinates[1]);
+            ps.setString(3, quartier);
+            ps.setString(4, request.getRequestDescription());
+            ps.setDate(5, request.getRequestDate());
+            ps.setInt(6, manager.getId());
             ps.setString(7, request.getStatus());
             ps.executeUpdate();
 
