@@ -1,5 +1,6 @@
 package ca.umontreal.dir.ift2255.team21.cli;
 
+import ca.umontreal.dir.ift2255.team21.Normaliser;
 import ca.umontreal.dir.ift2255.team21.accounts.Resident;
 import ca.umontreal.dir.ift2255.team21.apihandler.AddressVerificator;
 import ca.umontreal.dir.ift2255.team21.apihandler.TransformAddress;
@@ -10,8 +11,6 @@ import ca.umontreal.dir.ift2255.team21.entraves.Travaux;
 import ca.umontreal.dir.ift2255.team21.requests.Requests;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
 import java.util.Scanner;
 
 import java.sql.Date;
@@ -39,11 +38,13 @@ public class DisplayResident {
         String footer = """
         ||--------------------------------------------------------------------------------------------------------||
         ||  1) Consultation des travaux en cours/à venir.                                                         ||
-        ||  2) Consultation des entraves.                                                                         ||
-        ||  3) Soumission de requête                                                                              ||
-        ||  4) Planification participative                                                                        ||
-        ||  4) Recherche de travaux                                                                               ||
-        ||  5) Se déconnecter                                                                                     ||
+        ||  2) Rechercher des travaux en cours/à venir.                                                           ||
+        ||  3) Consultation des entraves.                                                                         ||
+        ||  4) Rechercher des entraves.                                                                           ||
+        ||  5) Soumission de requête                                                                              ||
+        ||  6) Planification participative                                                                        ||
+        ||  7) Recherche de travaux                                                                               ||
+        ||  8) Se déconnecter                                                                                     ||
         ||                                                                                                        ||
         \\\\========================================================================================================//
                                     Votre choix :   """;
@@ -65,18 +66,24 @@ public class DisplayResident {
                 travauxResident(resident,travauxArrayList,entravesArrayList, 0);
                 break;
             case 2:
-                entravesResident(resident,travauxArrayList,entravesArrayList, 0);
+                filtrer_par_quartier(resident,travauxArrayList,entravesArrayList);
                 break;
             case 3:
-                soumissionRequete(resident, travauxArrayList, entravesArrayList);
+                entravesResident(resident,travauxArrayList,entravesArrayList, 0);
                 break;
             case 4:
-                participation(resident, travauxArrayList,entravesArrayList);
+                filtrer_entraves(resident,travauxArrayList,entravesArrayList);
                 break;
             case 5:
-                rechercheTravaux(resident, travauxArrayList,entravesArrayList);
+                soumissionRequete(resident, travauxArrayList, entravesArrayList);
                 break;
             case 6:
+                participation(resident, travauxArrayList,entravesArrayList);
+                break;
+            case 7:
+                rechercheTravaux(resident, travauxArrayList,entravesArrayList);
+                break;
+            case 8:
                 resident = null;
                 break;
             default:
@@ -139,7 +146,7 @@ public class DisplayResident {
                 }
                 break;
             case 3:
-                if (i<entravesArrayList.size()){
+                if (i<travauxArrayList.size()){
                     index++;
                     travauxResident(resident, travauxArrayList, entravesArrayList, index);
                 }else {
@@ -164,7 +171,7 @@ public class DisplayResident {
                 ,"Lachine","L'Île-Bizard-Sainte-Geneviève","LaSalle","Le Plateau-Mont-Royal","Le Sud-Ouest"
                 ,"Mercier-Hochelaga-Maisonneuve","Montréal-Nord","Pierrefonds-Roxboro","Rivière-des-Prairies-Pointe-aux-Trembles"
                 ,"Rosemont-La-Petite-Patrie","Saint-Léonard","St-Laurent","Verdun","Ville-Marie", "Villeray-Saint-Michel-Parc-Extension"};
-        String entete = """
+        System.out.print("""
         //========================================================================================================\\\\
         ||                                    Entrez le nom du quartier que vous                                  ||
         ||                                      voulez utiliser comme filtre :                                    ||
@@ -191,7 +198,7 @@ public class DisplayResident {
         ||                                                                                                        ||
         || 0) Retourner                                                                                           ||
         \\\\========================================================================================================//
-                                    Votre choix :   """;
+                                    Votre choix :   """);
         choice = scanner.nextInt();
         if(choice <= strings.length) {
             ArrayList<Travaux> travaux_quartier_specifique = filtrer_resultats(travauxArrayList, strings[choice-1]);
@@ -203,6 +210,63 @@ public class DisplayResident {
             filtrer_par_quartier(resident,travauxArrayList,entravesArrayList);
         }
     }
+    private void filtrer_entraves(Resident resident, ArrayList<Travaux> travauxArrayList, ArrayList<Entraves> entravesArrayList) {
+        Scanner scanner = new Scanner(System.in);
+        Scanner keyboard = new Scanner(System.in);
+        int choice=0;
+        String nom_de_rue;
+        String[] strings = {"Ahuntsic-Cartierville","Anjou","Côte-des-Neiges-Notre-Dame-de-Grâce"
+                ,"Lachine","L'Île-Bizard-Sainte-Geneviève","LaSalle","Le Plateau-Mont-Royal","Le Sud-Ouest"
+                ,"Mercier-Hochelaga-Maisonneuve","Montréal-Nord","Pierrefonds-Roxboro","Rivière-des-Prairies-Pointe-aux-Trembles"
+                ,"Rosemont-La-Petite-Patrie","Saint-Léonard","St-Laurent","Verdun","Ville-Marie", "Villeray-Saint-Michel-Parc-Extension"};
+        System.out.println("""
+        //========================================================================================================\\\\
+        ||                                    Entrez le nom du quartier que vous                                  ||
+        ||                                      voulez utiliser comme filtre :                                    ||
+        ||--------------------------------------------------------------------------------------------------------||
+        ||--------------------------------------------------------------------------------------------------------||
+        || 1) Ahuntsic-Cartierville                                                                               ||
+        || 2) Anjou                                                                                               ||
+        || 3) Côte-des-Neiges-Notre-Dame-de-Grâce                                                                 ||
+        || 4) Lachine                                                                                             ||
+        || 5) L'Île-Bizard-Sainte-Geneviève                                                                       ||
+        || 6) LaSalle                                                                                             ||
+        || 7) Le Plateau-Mont-Royal                                                                               ||
+        || 8) Le Sud-Ouest                                                                                        ||
+        || 9) Mercier-Hochelaga-Maisonneuve                                                                       ||
+        || 10) Montréal-Nord                                                                                      ||
+        || 11) Pierrefonds-Roxboro                                                                                ||
+        || 12) Rivière-des-Prairies-Pointe-aux-Trembles                                                           ||
+        || 13) Rosemont-La-Petite-Patrie                                                                          ||
+        || 14) Saint-Léonard                                                                                      ||
+        || 15) St-Laurent                                                                                         ||
+        || 16) Verdun                                                                                             ||
+        || 17) Ville-Marie                                                                                        ||
+        || 18) Villeray-Saint-Michel-Parc-Extension                                                               ||
+        ||                                                                                                        ||
+        || 0) Retourner à l'accueil                                                                               ||
+        || 99) Rechercher par rue                                                                                 ||
+        \\\\========================================================================================================//
+                                    Votre choix :   """);
+        choice = scanner.nextInt();
+        if(choice <= strings.length) {
+            ArrayList<Travaux> travaux_quartier_specifique = filtrer_resultats(travauxArrayList, strings[choice-1]);
+            travauxResident(resident, travauxArrayList, entravesArrayList, 0, travaux_quartier_specifique);
+        } else if (choice==0) {
+            homePageResident(resident,travauxArrayList,entravesArrayList);
+        } else if (choice==99) {
+            System.out.print("      Entrez le nom de rue que vous recherchez : ");
+            nom_de_rue = keyboard.nextLine();
+            nom_de_rue = Normaliser.stringNormaliser(nom_de_rue);
+            ArrayList<Entraves> entravesSpecial = filtrer_resultats(entravesArrayList,"",nom_de_rue);
+            entravesResident(resident, travauxArrayList, entravesArrayList, 0, entravesSpecial);
+        }else{
+            System.err.println("Entrée invalide");
+            filtrer_par_quartier(resident,travauxArrayList,entravesArrayList);
+        }
+    }
+
+
 
     private void travauxResident(Resident resident, ArrayList<Travaux> travauxArrayList,
                                  ArrayList<Entraves> entravesArrayList, int index, ArrayList<Travaux> travaux_quartier_specifique) {
@@ -256,7 +320,7 @@ public class DisplayResident {
                 }
                 break;
             case 3:
-                if (i<entravesArrayList.size()){
+                if (i<travaux_quartier_specifique.size()){
                     index++;
                     travauxResident(resident, travauxArrayList, entravesArrayList, index, travaux_quartier_specifique);
                 }else {
@@ -280,6 +344,26 @@ public class DisplayResident {
         for (Travaux travaux : travauxArrayList) {
             if(travaux.getBoroughid().equals(quartier)){
                 arrayListRetour.add(travaux);
+            }
+        }
+        return arrayListRetour;
+    }
+
+    private ArrayList<Entraves> filtrer_resultats(ArrayList<Entraves> entravesArrayList, String quartier, String street){
+        ArrayList<Entraves> arrayListRetour = new ArrayList<>();
+
+        if (quartier.isBlank()) {
+            for (Entraves entraves : entravesArrayList) {
+                String streetid = Normaliser.stringNormaliser(entraves.getSteetid());
+                if(Normaliser.checker_for_text_similarity(streetid,street)){
+                    arrayListRetour.add(entraves);
+                }
+            }
+        }else {
+            for (Entraves entraves : entravesArrayList) {
+                if (entraves.getneighborhood().equals(quartier)) {
+                    arrayListRetour.add(entraves);
+                }
             }
         }
         return arrayListRetour;
@@ -354,6 +438,78 @@ public class DisplayResident {
 
         clearScreen();
     }
+
+    private void entravesResident(Resident resident, ArrayList<Travaux> travauxArrayList,
+                                  ArrayList<Entraves> entravesArrayList, int index, ArrayList<Entraves> entraves_specifiques) {
+        Scanner scanner = new Scanner(System.in);
+        int choice=0;
+        String entete = """
+        //========================================================================================================\\\\
+        ||                                     Nouveautés sur les constructions                                   ||
+        ||                                          Dans votre région :                                           ||
+        ||--------------------------------------------------------------------------------------------------------||
+        ||--------------------------------------------------------------------------------------------------------||
+        """;
+        String footer = """
+        ||--------------------------------------------------------------------------------------------------------||
+        ||                                                                                                        ||
+        ||  1) Revenir à l'accueil                                                                                ||
+        ||  2) Revenir à la page précédente                                                                       ||
+        ||  3) Aller à la page suivante                                                                           ||
+        ||                                                                                                        ||
+        \\\\========================================================================================================//
+                                    Votre choix :   """;
+        String body= entete;
+        int i  = index*7;
+        int borne = (index+1)*7;
+        for (; i < borne; i++) {
+            if (i<entraves_specifiques.size()) {
+                body += entraves_specifiques.get(i);
+                body += "||--------------------------------------------------------------------------------------------------------||\n";
+            }else break;
+        }
+        body+=footer;
+        System.out.print(body);
+        try {
+            choice = scanner.nextInt();
+        }catch (Exception e) {
+            System.err.println("Votre entrée est invalide!");
+            entravesResident(resident, travauxArrayList, entravesArrayList, index, entraves_specifiques);
+        }
+        clearScreen();
+        switch (choice){
+            case 1:
+                homePageResident(resident, travauxArrayList, entravesArrayList);
+                break;
+            case 2:
+                if (i<entraves_specifiques.size()){
+                    index++;
+                    entravesResident(resident, travauxArrayList, entravesArrayList, index, entraves_specifiques);
+                }else {
+                    System.err.println("Vous êtes rendu à la fin de la liste.");
+                    entravesResident(resident, travauxArrayList, entravesArrayList, index, entraves_specifiques);
+                }
+                break;
+            case 3:
+                if (index > 0){
+                    index--;
+                    entravesResident(resident, travauxArrayList, entravesArrayList, index, entraves_specifiques);
+                }else {
+                    System.err.println("On ne peut pas retourner plus en arrière.");
+                    entravesResident(resident, travauxArrayList, entravesArrayList, index, entraves_specifiques);
+                }
+                break;
+            default:
+                System.err.println("Votre choix est introuvable");
+                entravesResident(resident, travauxArrayList, entravesArrayList, index);
+                break;
+
+        }
+
+
+        clearScreen();
+    }
+
     private void soumissionRequete(Resident resident, ArrayList<Travaux> travauxArrayList,
                                   ArrayList<Entraves> entravesArrayList) {
         Scanner scanner = new Scanner(System.in);
