@@ -17,8 +17,8 @@ import java.time.LocalDate;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) throws Exception {
-//        Display display = new Display();
-//        display.introScreen();
+        Display display = new Display();
+        display.introScreen();
         String[] test = {"a", "Aaa"};
         System.out.println(test);
 
